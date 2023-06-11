@@ -1,9 +1,16 @@
+/** 
+ * @Author       : pengwei.shi
+ * @Date         : 2023-06-11 19:19:52
+ * @LastEditors  : pengwei.shi
+ * @LastEditTime : 2023-06-11 20:05:42
+ * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Base\StateMachine.ts
+ * @Description  : 
+ */
 import { _decorator, Animation, Component } from "cc";
-import { EntityTypeEnum } from "../Common";
-import { FsmParamTypeEnum } from "../Enum";
-const { ccclass } = _decorator;
+import { EntityTypeEnum, FsmParamTypeEnum } from "../Enum";
 import State from "./State";
 import SubStateMachine from "./SubStateMachine";
+const { ccclass } = _decorator;
 
 type ParamsValueType = boolean | number;
 

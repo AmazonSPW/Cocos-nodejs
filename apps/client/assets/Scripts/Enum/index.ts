@@ -9,4 +9,16 @@ export enum ParamsNameEnum {
   Attack = "Attack",
 }
 
-export enum EventEnum {}
+export enum EventEnum { }
+
+
+export enum EntityStateEnum {
+  Idle = "Idle",
+  Run = "Run",
+  Attack = "Attack",
+}
+
+
+export enum EntityTypeEnum {
+
+}

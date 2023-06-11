@@ -1,3 +1,11 @@
+/** 
+ * @Author       : pengwei.shi
+ * @Date         : 2023-06-11 19:19:52
+ * @LastEditors  : pengwei.shi
+ * @LastEditTime : 2023-06-11 20:00:32
+ * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Base\EntityManager.ts
+ * @Description  : 
+ */
 import { _decorator, Component } from "cc";
 import { EntityStateEnum } from "../Enum";
 import StateMachine from "./StateMachine";
