@@ -2,14 +2,14 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 22:02:37
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-12 17:56:54
+ * @LastEditTime : 2023-06-12 19:19:56
  * @FilePath     : \client\assets\Scripts\Scene\BattleMgr.ts
  * @Description  : 
  */
-import { _decorator, Component, instantiate, Node, Prefab } from 'cc';
-import { EEntityType } from '../Common';
+import { _decorator, Component, instantiate, Node, Prefab, SpriteFrame } from 'cc';
+import { EntityTypeEnum } from '../Common';
 import { ActorMgr } from '../Entity/Actor/ActorMgr';
-import { EPrefabPath } from '../Enum';
+import { EPrefabPath, ETexTurePath } from '../Enum';
 import DataManager from '../Global/DataManager';
 import { ResourceManager } from '../Global/ResourceManager';
 import { JoyStickMgr } from '../UI/JoyStickMgr';
@@ -34,7 +34,7 @@ export class BattleMgr extends Component {
     }
 
     protected initMap() {
-        let prefab = DataManager.Instance.prefabMap.get(EEntityType.Map);
+        let prefab = DataManager.Instance.prefabMap.get(EntityTypeEnum.Map);
         if (!prefab) return;
         let map = instantiate(prefab);
         map.setParent(this.stage);
@@ -48,12 +48,33 @@ export class BattleMgr extends Component {
             });
             list.push(p);
         }
+
+        for (const key in ETexTurePath) {
+            let p = ResourceManager.Instance.loadDir(ETexTurePath[key], SpriteFrame).then(e => {
+                DataManager.Instance.textureMap.set(key, e);
+            });
+            list.push(p);
+        }
         await Promise.all(list);
     }
 
     protected update(dt: number): void {
         if (!this._useUpdate) return;
         this.render();
+        this.tick(dt);
+    }
+
+    private tick(dt: number) {
+        this.tickActor(dt);
+
+    }
+
+    private tickActor(dt: number) {
+        for (let data of DataManager.Instance.state.actors) {
+            let { type, id } = data;
+            let am = DataManager.Instance.actorMap.get(id);
+            am.tick(dt);
+        }
     }
 
     private render() {

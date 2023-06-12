@@ -2,8 +2,8 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 20:25:39
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-11 23:05:53
- * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\UI\JoyStickMgr.ts
+ * @LastEditTime : 2023-06-12 18:15:23
+ * @FilePath     : \client\assets\Scripts\UI\JoyStickMgr.ts
  * @Description  : 
  */
 import { _decorator, Component, EventTouch, Input, input, Node, UITransform, Vec2, Vec3 } from 'cc';
@@ -29,6 +29,12 @@ export class JoyStickMgr extends Component {
         input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
         input.on(Input.EventType.TOUCH_MOVE, this.onTouchMove, this);
         input.on(Input.EventType.TOUCH_END, this.onTouchEnd, this);
+    }
+
+    protected onDestroy(): void {
+        input.off(Input.EventType.TOUCH_START, this.onTouchStart, this);
+        input.off(Input.EventType.TOUCH_MOVE, this.onTouchMove, this);
+        input.off(Input.EventType.TOUCH_END, this.onTouchEnd, this);
     }
 
     private onTouchStart = (e: EventTouch) => {

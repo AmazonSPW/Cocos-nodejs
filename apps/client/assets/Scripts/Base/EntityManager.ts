@@ -2,6 +2,14 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 19:19:52
  * @LastEditors  : pengwei.shi
+ * @LastEditTime : 2023-06-12 19:00:29
+ * @FilePath     : \client\assets\Scripts\Base\EntityManager.ts
+ * @Description  : 
+ */
+/** 
+ * @Author       : pengwei.shi
+ * @Date         : 2023-06-11 19:19:52
+ * @LastEditors  : pengwei.shi
  * @LastEditTime : 2023-06-11 20:00:32
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Base\EntityManager.ts
  * @Description  : 
