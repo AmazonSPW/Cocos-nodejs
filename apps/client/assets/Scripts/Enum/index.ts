@@ -1,3 +1,11 @@
+/** 
+ * @Author       : pengwei.shi
+ * @Date         : 2023-06-11 19:19:52
+ * @LastEditors  : pengwei.shi
+ * @LastEditTime : 2023-06-12 17:17:21
+ * @FilePath     : \client\assets\Scripts\Enum\index.ts
+ * @Description  : 
+ */
 export enum FsmParamTypeEnum {
   Number = "Number",
   Trigger = "Trigger",
@@ -21,4 +29,10 @@ export enum EntityStateEnum {
 
 export enum EntityTypeEnum {
 
+}
+
+
+export enum EPrefabPath {
+  Actor1 = "prefab/Actor",
+  Map = "prefab/Map",
 }

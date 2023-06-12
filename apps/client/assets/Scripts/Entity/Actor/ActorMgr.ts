@@ -2,18 +2,22 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 22:04:16
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-11 23:06:19
- * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Entity\Actor\ActorMgr.ts
+ * @LastEditTime : 2023-06-12 17:16:20
+ * @FilePath     : \client\assets\Scripts\Entity\Actor\ActorMgr.ts
  * @Description  : 
  */
 import { _decorator, Component } from 'cc';
-import { InputTypeEnum } from '../../Common';
+import { IActor, InputTypeEnum } from '../../Common';
 import DataManager from '../../Global/DataManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('ActorMgr')
 export class ActorMgr extends Component {
     protected onLoad(): void {
+
+    }
+
+    public init(data: IActor) {
 
     }
 
@@ -30,7 +34,11 @@ export class ActorMgr extends Component {
             })
 
 
-            console.log(`SWP log_____________ ${JSON.stringify(DataManager.Instance.state.actors[0].position)}`);
+            // console.log(`SWP log_____________ ${JSON.stringify(DataManager.Instance.state.actors[0].position)}`);
         }
+    }
+
+    public render(data: IActor) {
+        this.node.setPosition(data.position.x, data.position.y);
     }
 }
