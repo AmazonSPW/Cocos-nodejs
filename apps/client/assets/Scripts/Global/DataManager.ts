@@ -2,16 +2,18 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 19:19:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-13 17:31:41
+ * @LastEditTime : 2023-06-13 23:25:28
  * @FilePath     : \client\assets\Scripts\Global\DataManager.ts
  * @Description  : 
  */
-import { Node, Prefab, SpriteFrame } from "cc";
+import { Node, Prefab, SpriteFrame, screen } from "cc";
 import Singleton from "../Base/Singleton";
 import { EntityTypeEnum, IBullet, IClientInput, IState, InputTypeEnum } from "../Common";
 import { ActorMgr } from "../Entity/Actor/ActorMgr";
 import { BulletMgr } from "../Entity/Bullet/BulletMgr";
+import { EventEnum } from "../Enum";
 import { JoyStickMgr } from "../UI/JoyStickMgr";
+import EventManager from "./EventManager";
 
 export default class DataManager extends Singleton {
   public static get Instance() {
@@ -53,8 +55,8 @@ export default class DataManager extends Singleton {
         if (!actor) return;
         actor.direction.x = x;
         actor.direction.y = y;
-        actor.position.x += SPEED * x * dt;
-        actor.position.y += SPEED * y * dt;
+        actor.position.x += ACTOR_SPEED * x * dt;
+        actor.position.y += ACTOR_SPEED * y * dt;
       }
         break;
 
@@ -68,16 +70,35 @@ export default class DataManager extends Singleton {
           type: this.actorMap.get(owner).bulletType,
         }
 
+        EventManager.Instance.emit(EventEnum.BulletBorn, owner);
+
         this.state.bullets.push(bullet);
+        break;
+
+      case InputTypeEnum.TimePast:
+        let { dt } = input;
+        let { bullets } = this.state;
+
+        for (let i = bullets.length - 1; i >= 0; i--) {
+          let bullet = bullets[i];
+          if (Math.abs(bullet.position.x) > screen.resolution.x / 2 || Math.abs(bullet.position.y) > screen.resolution.y / 2) {
+            EventManager.Instance.emit(EventEnum.ExplosionBorn, bullet.id, { x: bullet.position.x, y: bullet.position.y });
+            bullets.splice(i, 1);
+          }
+        }
+
+        for (let bullet of bullets) {
+          bullet.position.x += bullet.direction.x * dt * BULLET_SPEED;
+          bullet.position.y += bullet.direction.y * dt * BULLET_SPEED;
+        }
         break;
 
       default:
         break;
-
-
     }
   }
 }
 
 
-const SPEED = 100;
+const ACTOR_SPEED = 100;
+const BULLET_SPEED = 600;

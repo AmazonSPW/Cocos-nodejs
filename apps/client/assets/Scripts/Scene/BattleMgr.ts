@@ -2,18 +2,18 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 22:02:37
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-13 17:33:04
+ * @LastEditTime : 2023-06-13 23:17:51
  * @FilePath     : \client\assets\Scripts\Scene\BattleMgr.ts
  * @Description  : 
  */
 import { _decorator, Component, instantiate, Node, Prefab, SpriteFrame } from 'cc';
-import { EntityTypeEnum } from '../Common';
+import { EntityTypeEnum, InputTypeEnum } from '../Common';
 import { ActorMgr } from '../Entity/Actor/ActorMgr';
+import { BulletMgr } from '../Entity/Bullet/BulletMgr';
 import { EPrefabPath, ETexTurePath } from '../Enum';
 import DataManager from '../Global/DataManager';
 import { ResourceManager } from '../Global/ResourceManager';
 import { JoyStickMgr } from '../UI/JoyStickMgr';
-import { BulletMgr } from '../Entity/Bullet/BulletMgr';
 const { ccclass, property } = _decorator;
 
 @ccclass('BattleMgr')
@@ -68,6 +68,10 @@ export class BattleMgr extends Component {
     private tick(dt: number) {
         this.tickActor(dt);
 
+        DataManager.Instance.apllyInput({
+            type: InputTypeEnum.TimePast,
+            dt,
+        });
     }
 
     private tickActor(dt: number) {

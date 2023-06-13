@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-12 20:02:15
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-13 17:42:40
+ * @LastEditTime : 2023-06-14 00:00:49
  * @FilePath     : \client\assets\Scripts\Entity\Weapon\WeaponMgr.ts
  * @Description  : 
  */
@@ -27,19 +27,25 @@ export class WeaponMgr extends EntityManager {
         this.anchor = this.body.getChildByName("Anchor");
         this.point = this.anchor.getChildByName("Point");
 
-        this.fsm = this.addComponent(WeaponStateMachine);
+        this.fsm = this.body.addComponent(WeaponStateMachine);
         this.fsm.init(data.weaponType);
 
         this.state = EntityStateEnum.Idle;
 
         EventManager.Instance.on(EventEnum.WeaponShoot, this.handleWeaponShot, this);
+        EventManager.Instance.on(EventEnum.BulletBorn, this.handleBulletBorn, this);
 
     }
 
 
     protected onDestroy(): void {
         EventManager.Instance.off(EventEnum.WeaponShoot, this.handleWeaponShot, this);
+        EventManager.Instance.off(EventEnum.BulletBorn, this.handleBulletBorn, this);
+    }
 
+    private handleBulletBorn(owner: number) {
+        if (owner !== this.owner) return;
+        this.state = EntityStateEnum.Attack;
     }
 
     private handleWeaponShot() {
@@ -63,6 +69,5 @@ export class WeaponMgr extends EntityManager {
             }
         });
 
-        console.log(`SWP log_____________ `, DataManager.Instance.state.bullets);
     }
 }
