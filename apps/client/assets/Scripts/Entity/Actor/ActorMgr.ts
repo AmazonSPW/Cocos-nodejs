@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 22:04:16
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-12 21:20:02
+ * @LastEditTime : 2023-06-13 16:49:11
  * @FilePath     : \client\assets\Scripts\Entity\Actor\ActorMgr.ts
  * @Description  : 
  */
@@ -18,8 +18,10 @@ const { ccclass, property } = _decorator;
 @ccclass('ActorMgr')
 export class ActorMgr extends EntityManager {
     private wm: WeaponMgr = null;
+    public bulletType: EntityTypeEnum;
 
     public init(data: IActor) {
+        this.bulletType = data.bulletType;
         this.fsm = this.addComponent(ActorStateMachine);
         this.fsm.init(data.type);
 
@@ -37,7 +39,7 @@ export class ActorMgr extends EntityManager {
     public tick(dt: number): void {
         if (DataManager.Instance.jm.joyStickDir.lengthSqr() > 0) {
             const { x, y } = DataManager.Instance.jm.joyStickDir;
-            DataManager.Instance.aplly({
+            DataManager.Instance.apllyInput({
                 id: 1,
                 type: InputTypeEnum.ActorMove,
                 direction: {

@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 22:02:37
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-12 19:19:56
+ * @LastEditTime : 2023-06-13 16:24:23
  * @FilePath     : \client\assets\Scripts\Scene\BattleMgr.ts
  * @Description  : 
  */
@@ -21,7 +21,7 @@ export class BattleMgr extends Component {
     public ui: Node;
     private _useUpdate: boolean = false;
     protected onLoad(): void {
-        this.stage = this.node.getChildByName("Stage");
+        DataManager.Instance.stage = this.stage = this.node.getChildByName("Stage");
         this.ui = this.node.getChildByName("UI");
         DataManager.Instance.jm = this.ui.getComponentInChildren(JoyStickMgr);
     }

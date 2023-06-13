@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 19:19:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-12 19:55:09
+ * @LastEditTime : 2023-06-13 16:15:19
  * @FilePath     : \client\assets\Scripts\Enum\index.ts
  * @Description  : 
  */
@@ -17,7 +17,9 @@ export enum ParamsNameEnum {
   Attack = "Attack",
 }
 
-export enum EventEnum { }
+export enum EventEnum {
+  WeaponShoot = "WeaponShoot",
+}
 
 
 export enum EntityStateEnum {
