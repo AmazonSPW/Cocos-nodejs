@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 19:19:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-13 16:15:19
+ * @LastEditTime : 2023-06-13 17:36:11
  * @FilePath     : \client\assets\Scripts\Enum\index.ts
  * @Description  : 
  */
@@ -32,6 +32,7 @@ export enum EPrefabPath {
   Actor1 = "prefab/Actor",
   Map = "prefab/Map",
   Weapon1 = "prefab/Weapon1",
+  Bullet2 = "prefab/Bullet2",
 }
 
 export enum ETexTurePath {
@@ -39,4 +40,5 @@ export enum ETexTurePath {
   Actor1Run = "texture/actor/actor1/run",
   Weapon1Idle = "texture/weapon/weapon1/idle",
   Weapon1Run = "texture/weapon/weapon1/idle/run",
+  Bullet2Idle = "texture/bullet/bullet2",
 }

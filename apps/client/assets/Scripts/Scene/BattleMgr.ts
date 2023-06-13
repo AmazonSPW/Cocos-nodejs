@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 22:02:37
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-13 16:24:23
+ * @LastEditTime : 2023-06-13 17:33:04
  * @FilePath     : \client\assets\Scripts\Scene\BattleMgr.ts
  * @Description  : 
  */
@@ -13,6 +13,7 @@ import { EPrefabPath, ETexTurePath } from '../Enum';
 import DataManager from '../Global/DataManager';
 import { ResourceManager } from '../Global/ResourceManager';
 import { JoyStickMgr } from '../UI/JoyStickMgr';
+import { BulletMgr } from '../Entity/Bullet/BulletMgr';
 const { ccclass, property } = _decorator;
 
 @ccclass('BattleMgr')
@@ -79,6 +80,7 @@ export class BattleMgr extends Component {
 
     private render() {
         this.renderActor();
+        this.renderBullet();
     }
 
 
@@ -96,6 +98,25 @@ export class BattleMgr extends Component {
                 am.init(data);
             } else {
                 am.render(data);
+            }
+        }
+    }
+
+
+    private renderBullet() {
+        for (let data of DataManager.Instance.state.bullets) {
+            let { type, id } = data;
+            let bm = DataManager.Instance.bulletMap.get(id);
+            //初始化
+            if (!bm) {
+                let prefab = DataManager.Instance.prefabMap.get(type);
+                let bullet = instantiate(prefab);
+                bullet.parent = this.stage;
+                bm = bullet.addComponent(BulletMgr);
+                DataManager.Instance.bulletMap.set(id, bm);
+                bm.init(data);
+            } else {
+                bm.render(data);
             }
         }
     }

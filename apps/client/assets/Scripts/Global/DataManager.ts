@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 19:19:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-13 17:00:52
+ * @LastEditTime : 2023-06-13 17:31:41
  * @FilePath     : \client\assets\Scripts\Global\DataManager.ts
  * @Description  : 
  */
@@ -10,6 +10,7 @@ import { Node, Prefab, SpriteFrame } from "cc";
 import Singleton from "../Base/Singleton";
 import { EntityTypeEnum, IBullet, IClientInput, IState, InputTypeEnum } from "../Common";
 import { ActorMgr } from "../Entity/Actor/ActorMgr";
+import { BulletMgr } from "../Entity/Bullet/BulletMgr";
 import { JoyStickMgr } from "../UI/JoyStickMgr";
 
 export default class DataManager extends Singleton {
@@ -20,6 +21,7 @@ export default class DataManager extends Singleton {
   public stage: Node;
   public jm: JoyStickMgr;
   public actorMap: Map<number, ActorMgr> = new Map();
+  public bulletMap: Map<number, BulletMgr> = new Map();
   public prefabMap: Map<string, Prefab> = new Map();
   public textureMap: Map<string, SpriteFrame[]> = new Map();
 
@@ -28,7 +30,7 @@ export default class DataManager extends Singleton {
       id: 1,
       type: EntityTypeEnum.Actor1,
       weaponType: EntityTypeEnum.Weapon1,
-      bulletType: EntityTypeEnum.Bullet1,
+      bulletType: EntityTypeEnum.Bullet2,
       position: {
         x: 0,
         y: 0,

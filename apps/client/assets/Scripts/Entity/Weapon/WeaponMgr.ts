@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-12 20:02:15
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-13 16:58:42
+ * @LastEditTime : 2023-06-13 17:42:40
  * @FilePath     : \client\assets\Scripts\Entity\Weapon\WeaponMgr.ts
  * @Description  : 
  */
@@ -44,7 +44,7 @@ export class WeaponMgr extends EntityManager {
 
     private handleWeaponShot() {
         let pointWorldPos = this.point.getWorldPosition();
-        let pointStagePos = DataManager.Instance.stage.getComponent(UITransform).convertToWorldSpaceAR(pointWorldPos);
+        let pointStagePos = DataManager.Instance.stage.getComponent(UITransform).convertToNodeSpaceAR(pointWorldPos);
         let anchorWorldPos = this.anchor.getWorldPosition();
 
         let direction = new Vec2(pointWorldPos.x - anchorWorldPos.x, pointWorldPos.y - anchorWorldPos.y).normalize();
