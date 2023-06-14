@@ -2,8 +2,8 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 22:02:37
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-13 23:17:51
- * @FilePath     : \client\assets\Scripts\Scene\BattleMgr.ts
+ * @LastEditTime : 2023-06-14 15:11:51
+ * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Scene\BattleMgr.ts
  * @Description  : 
  */
 import { _decorator, Component, instantiate, Node, Prefab, SpriteFrame } from 'cc';
@@ -12,6 +12,7 @@ import { ActorMgr } from '../Entity/Actor/ActorMgr';
 import { BulletMgr } from '../Entity/Bullet/BulletMgr';
 import { EPrefabPath, ETexTurePath } from '../Enum';
 import DataManager from '../Global/DataManager';
+import { NetworkMgr } from '../Global/NetworkMgr';
 import { ObjectPool } from '../Global/ObjectPool';
 import { ResourceManager } from '../Global/ResourceManager';
 import { JoyStickMgr } from '../UI/JoyStickMgr';
@@ -26,13 +27,25 @@ export class BattleMgr extends Component {
         DataManager.Instance.stage = this.stage = this.node.getChildByName("Stage");
         this.ui = this.node.getChildByName("UI");
         DataManager.Instance.jm = this.ui.getComponentInChildren(JoyStickMgr);
+        this.stage.destroyAllChildren();
     }
 
     protected async start(): Promise<void> {
-        this.stage.destroyAllChildren();
-        await this.loadRes();
-        this.initMap();
-        this._useUpdate = true;
+        await this.connectServer();
+        NetworkMgr.Instance.sendMsg("Hello, this is Clent1");
+        NetworkMgr.Instance.listenMsg("haha", (data) => {
+            console.log(`SWP log_____________ listenMsg: `, data);
+        }, this);
+        // await this.loadRes();
+        // this.initMap();
+        // this._useUpdate = true;
+    }
+
+    private async connectServer() {
+        if (!(await NetworkMgr.Instance.connect().catch(() => false))) {
+            await new Promise((rs) => { setTimeout(rs, 1000) });
+            await this.connectServer();
+        }
     }
 
     protected initMap() {
