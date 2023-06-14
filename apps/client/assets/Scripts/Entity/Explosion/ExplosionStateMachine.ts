@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-13 22:54:11
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-13 23:17:20
+ * @LastEditTime : 2023-06-14 13:21:03
  * @FilePath     : \client\assets\Scripts\Entity\Explosion\ExplosionStateMachine.ts
  * @Description  : 
  */
@@ -11,6 +11,7 @@ import State from "../../Base/State";
 import StateMachine, { getInitParamsTrigger } from "../../Base/StateMachine";
 import { EntityTypeEnum } from "../../Common";
 import { EntityStateEnum, ParamsNameEnum } from "../../Enum";
+import { ObjectPool } from "../../Global/ObjectPool";
 const { ccclass } = _decorator;
 
 @ccclass("ExplosionStateMachine")
@@ -33,7 +34,7 @@ export class ExplosionStateMachine extends StateMachine {
 
     initAnimationEvent() {
         this.animationComponent.on(Animation.EventType.FINISHED, () => {
-            this.node.destroy();
+            ObjectPool.Instance.ret(this.node);
         });
     }
 

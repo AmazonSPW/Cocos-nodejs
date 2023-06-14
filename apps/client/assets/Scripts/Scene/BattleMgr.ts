@@ -12,6 +12,7 @@ import { ActorMgr } from '../Entity/Actor/ActorMgr';
 import { BulletMgr } from '../Entity/Bullet/BulletMgr';
 import { EPrefabPath, ETexTurePath } from '../Enum';
 import DataManager from '../Global/DataManager';
+import { ObjectPool } from '../Global/ObjectPool';
 import { ResourceManager } from '../Global/ResourceManager';
 import { JoyStickMgr } from '../UI/JoyStickMgr';
 const { ccclass, property } = _decorator;
@@ -113,10 +114,8 @@ export class BattleMgr extends Component {
             let bm = DataManager.Instance.bulletMap.get(id);
             //初始化
             if (!bm) {
-                let prefab = DataManager.Instance.prefabMap.get(type);
-                let bullet = instantiate(prefab);
-                bullet.parent = this.stage;
-                bm = bullet.addComponent(BulletMgr);
+                let bullet = ObjectPool.Instance.get(type);
+                bm = bullet.getComponent(BulletMgr) || bullet.addComponent(BulletMgr);
                 DataManager.Instance.bulletMap.set(id, bm);
                 bm.init(data);
             } else {

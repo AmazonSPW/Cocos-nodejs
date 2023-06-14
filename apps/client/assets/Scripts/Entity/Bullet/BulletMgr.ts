@@ -2,16 +2,17 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-13 17:23:56
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-13 23:03:51
+ * @LastEditTime : 2023-06-14 13:25:00
  * @FilePath     : \client\assets\Scripts\Entity\Bullet\BulletMgr.ts
  * @Description  : 
  */
-import { _decorator, instantiate } from 'cc';
+import { _decorator } from 'cc';
 import { EntityManager } from '../../Base/EntityManager';
 import { EntityTypeEnum, IBullet, IVEC2 } from '../../Common';
 import { EntityStateEnum, EventEnum } from '../../Enum';
 import DataManager from '../../Global/DataManager';
 import EventManager from '../../Global/EventManager';
+import { ObjectPool } from '../../Global/ObjectPool';
 import { ExplosionMgr } from '../Explosion/ExplosionMgr';
 import { BulletStateMachine } from './BulletStateMachine';
 const { ccclass, property } = _decorator;
@@ -35,15 +36,13 @@ export class BulletMgr extends EntityManager {
     private handleExplosionBorn(id: number, { x, y }: IVEC2) {
         if (id !== this.id) return;
 
-        let prefab = DataManager.Instance.prefabMap.get(EntityTypeEnum.Explosion);
-        let explosion = instantiate(prefab);
-        explosion.parent = DataManager.Instance.stage;
-        let em = explosion.addComponent(ExplosionMgr);
+        let explosion = ObjectPool.Instance.get(EntityTypeEnum.Explosion);
+        let em = explosion.getComponent(ExplosionMgr) || explosion.addComponent(ExplosionMgr);
         em.init(EntityTypeEnum.Explosion, { x, y });
 
         EventManager.Instance.off(EventEnum.ExplosionBorn, this.handleExplosionBorn, this);
         DataManager.Instance.bulletMap.delete(this.id);
-        this.node.destroy();
+        ObjectPool.Instance.ret(this.node);
     }
 
     public render(data: IBullet) {
