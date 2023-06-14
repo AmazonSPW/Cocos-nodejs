@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 22:07:35
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-13 21:25:10
+ * @LastEditTime : 2023-06-14 12:31:06
  * @FilePath     : \client\assets\Scripts\Common\State.ts
  * @Description  : 
  */
@@ -23,6 +23,7 @@ export interface IActor {
     type: EntityTypeEnum;
     weaponType: EntityTypeEnum;
     bulletType: EntityTypeEnum,
+    hp: number,
 }
 
 

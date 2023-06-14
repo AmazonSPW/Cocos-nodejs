@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 22:33:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-13 21:22:58
+ * @LastEditTime : 2023-06-14 12:14:06
  * @FilePath     : \client\assets\Scripts\Common\Enum.ts
  * @Description  : 
  */
@@ -10,6 +10,7 @@
 export enum InputTypeEnum {
     ActorMove = "ActorMove",
     WeaponShoot = "WeaponShoot",
+    /**时间流逝 */
     TimePast = "TimePast",
 }
 

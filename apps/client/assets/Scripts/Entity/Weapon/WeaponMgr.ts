@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-12 20:02:15
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-14 00:00:49
+ * @LastEditTime : 2023-06-14 12:07:47
  * @FilePath     : \client\assets\Scripts\Entity\Weapon\WeaponMgr.ts
  * @Description  : 
  */
@@ -49,6 +49,7 @@ export class WeaponMgr extends EntityManager {
     }
 
     private handleWeaponShot() {
+        if (this.owner !== DataManager.Instance.curPlayerID) return;
         let pointWorldPos = this.point.getWorldPosition();
         let pointStagePos = DataManager.Instance.stage.getComponent(UITransform).convertToNodeSpaceAR(pointWorldPos);
         let anchorWorldPos = this.anchor.getWorldPosition();

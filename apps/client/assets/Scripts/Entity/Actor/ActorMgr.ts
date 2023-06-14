@@ -2,11 +2,11 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 22:04:16
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-13 16:49:11
+ * @LastEditTime : 2023-06-14 12:34:58
  * @FilePath     : \client\assets\Scripts\Entity\Actor\ActorMgr.ts
  * @Description  : 
  */
-import { _decorator, instantiate } from 'cc';
+import { ProgressBar, _decorator, instantiate } from 'cc';
 import { EntityManager } from '../../Base/EntityManager';
 import { EntityTypeEnum, IActor, InputTypeEnum } from '../../Common';
 import { EntityStateEnum } from '../../Enum';
@@ -19,13 +19,18 @@ const { ccclass, property } = _decorator;
 export class ActorMgr extends EntityManager {
     private wm: WeaponMgr = null;
     public bulletType: EntityTypeEnum;
+    public id: number;
+
+    public hp: ProgressBar;
 
     public init(data: IActor) {
+        this.id = data.id;
         this.bulletType = data.bulletType;
         this.fsm = this.addComponent(ActorStateMachine);
         this.fsm.init(data.type);
 
         this.state = EntityStateEnum.Idle;
+        this.hp = this.node.getComponentInChildren(ProgressBar);
 
         //添加武器
         const prefab = DataManager.Instance.prefabMap.get(EntityTypeEnum.Weapon1);
@@ -37,6 +42,7 @@ export class ActorMgr extends EntityManager {
     }
 
     public tick(dt: number): void {
+        if (this.id != DataManager.Instance.curPlayerID) return;
         if (DataManager.Instance.jm.joyStickDir.lengthSqr() > 0) {
             const { x, y } = DataManager.Instance.jm.joyStickDir;
             DataManager.Instance.apllyInput({
@@ -63,6 +69,7 @@ export class ActorMgr extends EntityManager {
         //设置面向翻转
         if (direction.x != 0) {
             this.node.setScale(direction.x > 0 ? 1 : -1, 1);
+            this.hp.node.setScale(direction.x > 0 ? 1 : -1, 1);
         }
 
 
@@ -73,7 +80,8 @@ export class ActorMgr extends EntityManager {
         }
         let rad = Math.atan2(direction.y, x);
         let angle = rad * 180 / Math.PI;
-
         this.wm.node.setRotationFromEuler(0, 0, angle);
+
+        this.hp.progress = data.hp / this.hp.totalLength;
     }
 }

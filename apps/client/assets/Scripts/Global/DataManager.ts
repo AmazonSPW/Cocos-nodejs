@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 19:19:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-13 23:25:28
+ * @LastEditTime : 2023-06-14 12:32:26
  * @FilePath     : \client\assets\Scripts\Global\DataManager.ts
  * @Description  : 
  */
@@ -19,7 +19,7 @@ export default class DataManager extends Singleton {
   public static get Instance() {
     return super.GetInstance<DataManager>();
   }
-
+  public curPlayerID: number = 1;
   public stage: Node;
   public jm: JoyStickMgr;
   public actorMap: Map<number, ActorMgr> = new Map();
@@ -28,20 +28,38 @@ export default class DataManager extends Singleton {
   public textureMap: Map<string, SpriteFrame[]> = new Map();
 
   state: IState = {
-    actors: [{
-      id: 1,
-      type: EntityTypeEnum.Actor1,
-      weaponType: EntityTypeEnum.Weapon1,
-      bulletType: EntityTypeEnum.Bullet2,
-      position: {
-        x: 0,
-        y: 0,
+    actors: [
+      {
+        id: 1,
+        type: EntityTypeEnum.Actor1,
+        weaponType: EntityTypeEnum.Weapon1,
+        bulletType: EntityTypeEnum.Bullet2,
+        position: {
+          x: -150,
+          y: -150,
+        },
+        direction: {
+          x: 1,
+          y: 0,
+        },
+        hp: 50,
       },
-      direction: {
-        x: 1,
-        y: 0,
+      {
+        id: 2,
+        type: EntityTypeEnum.Actor1,
+        weaponType: EntityTypeEnum.Weapon1,
+        bulletType: EntityTypeEnum.Bullet2,
+        position: {
+          x: 150,
+          y: 150,
+        },
+        direction: {
+          x: 1,
+          y: 0,
+        },
+        hp: 100,
       }
-    }],
+    ],
     bullets: [],
     nextBulletID: 0
   };
@@ -77,10 +95,23 @@ export default class DataManager extends Singleton {
 
       case InputTypeEnum.TimePast:
         let { dt } = input;
-        let { bullets } = this.state;
+        let { bullets, actors } = this.state;
 
         for (let i = bullets.length - 1; i >= 0; i--) {
           let bullet = bullets[i];
+
+          for (let j = actors.length - 1; j >= 0; j--) {
+            let actor = actors[j];
+            if (actor.id === this.curPlayerID) continue;
+            let disSqr = (actor.position.x - bullet.position.x) ** 2 + (actor.position.y - bullet.position.y) ** 2;
+            if (disSqr < (BULLET_RADIUS + ACTOR_RADIUS) ** 2) {
+              EventManager.Instance.emit(EventEnum.ExplosionBorn, bullet.id, { x: bullet.position.x, y: bullet.position.y });
+              bullets.splice(i, 1);
+              actor.hp -= BULLET_DAMAGE;
+              break;
+            }
+          }
+
           if (Math.abs(bullet.position.x) > screen.resolution.x / 2 || Math.abs(bullet.position.y) > screen.resolution.y / 2) {
             EventManager.Instance.emit(EventEnum.ExplosionBorn, bullet.id, { x: bullet.position.x, y: bullet.position.y });
             bullets.splice(i, 1);
@@ -102,3 +133,6 @@ export default class DataManager extends Singleton {
 
 const ACTOR_SPEED = 100;
 const BULLET_SPEED = 600;
+const BULLET_RADIUS = 10;
+const ACTOR_RADIUS = 50;
+const BULLET_DAMAGE = 10;
