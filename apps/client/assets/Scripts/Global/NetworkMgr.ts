@@ -1,9 +1,16 @@
-import Singleton from "../Base/Singleton";
+/** 
+ * @Author       : pengwei.shi
+ * @Date         : 2023-06-14 14:37:43
+ * @LastEditors  : pengwei.shi
+ * @LastEditTime : 2023-06-14 20:54:54
+ * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Global\NetworkMgr.ts
+ * @Description  : 
+ */
+import { Singleton } from "../Base/Singleton";
 
-export class NetworkMgr extends Singleton {
-    static get Instance() {
-        return super.GetInstance<NetworkMgr>();
-    }
+@Singleton()
+export class NetworkMgr {
+    public static Instance: NetworkMgr;
 
     private port = 9876;
     private ws: WebSocket;

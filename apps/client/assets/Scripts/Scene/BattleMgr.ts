@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 22:02:37
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-14 15:11:51
+ * @LastEditTime : 2023-06-14 20:57:41
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Scene\BattleMgr.ts
  * @Description  : 
  */
@@ -31,14 +31,14 @@ export class BattleMgr extends Component {
     }
 
     protected async start(): Promise<void> {
-        await this.connectServer();
-        NetworkMgr.Instance.sendMsg("Hello, this is Clent1");
-        NetworkMgr.Instance.listenMsg("haha", (data) => {
-            console.log(`SWP log_____________ listenMsg: `, data);
-        }, this);
-        // await this.loadRes();
-        // this.initMap();
-        // this._useUpdate = true;
+        // await this.connectServer();
+        // NetworkMgr.Instance.sendMsg("Hello, this is Clent1");
+        // NetworkMgr.Instance.listenMsg("haha", (data) => {
+        //     console.log(`SWP log_____________ listenMsg: `, data);
+        // }, this);
+        await this.loadRes();
+        this.initMap();
+        this._useUpdate = true;
     }
 
     private async connectServer() {

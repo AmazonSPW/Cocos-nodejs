@@ -2,12 +2,12 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 19:19:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-14 12:32:26
- * @FilePath     : \client\assets\Scripts\Global\DataManager.ts
+ * @LastEditTime : 2023-06-14 20:54:14
+ * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Global\DataManager.ts
  * @Description  : 
  */
 import { Node, Prefab, SpriteFrame, screen } from "cc";
-import Singleton from "../Base/Singleton";
+import { Singleton } from "../Base/Singleton";
 import { EntityTypeEnum, IBullet, IClientInput, IState, InputTypeEnum } from "../Common";
 import { ActorMgr } from "../Entity/Actor/ActorMgr";
 import { BulletMgr } from "../Entity/Bullet/BulletMgr";
@@ -15,10 +15,9 @@ import { EventEnum } from "../Enum";
 import { JoyStickMgr } from "../UI/JoyStickMgr";
 import EventManager from "./EventManager";
 
-export default class DataManager extends Singleton {
-  public static get Instance() {
-    return super.GetInstance<DataManager>();
-  }
+@Singleton()
+export default class DataManager {
+  public static Instance: DataManager;
   public curPlayerID: number = 1;
   public stage: Node;
   public jm: JoyStickMgr;

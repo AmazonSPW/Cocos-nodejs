@@ -1,4 +1,4 @@
-import Singleton from "../Base/Singleton";
+import { Singleton } from "../Base/Singleton";
 import { EventEnum } from "../Enum";
 
 interface IItem {
@@ -6,10 +6,9 @@ interface IItem {
   ctx: unknown;
 }
 
-export default class EventManager extends Singleton {
-  static get Instance() {
-    return super.GetInstance<EventManager>();
-  }
+@Singleton()
+export default class EventManager {
+  public static Instance: EventManager;
 
   private map: Map<EventEnum, Array<IItem>> = new Map();
 

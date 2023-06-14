@@ -2,19 +2,18 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-14 13:04:34
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-14 13:21:14
- * @FilePath     : \client\assets\Scripts\Global\ObjectPool.ts
+ * @LastEditTime : 2023-06-14 20:55:24
+ * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Global\ObjectPool.ts
  * @Description  : 
  */
 import { Node, instantiate } from "cc";
-import Singleton from "../Base/Singleton";
+import { Singleton } from "../Base/Singleton";
 import { EntityTypeEnum } from "../Common";
 import DataManager from "./DataManager";
 
-export class ObjectPool extends Singleton {
-    static get Instance() {
-        return super.GetInstance<ObjectPool>();
-    }
+@Singleton()
+export class ObjectPool {
+    public static Instance: ObjectPool;
 
     private PoolNode: Node;
     private pool: Map<EntityTypeEnum, Node[]> = new Map();
