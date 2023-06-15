@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 22:02:37
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-14 20:57:41
+ * @LastEditTime : 2023-06-15 18:09:52
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Scene\BattleMgr.ts
  * @Description  : 
  */
@@ -24,21 +24,25 @@ export class BattleMgr extends Component {
     public ui: Node;
     private _useUpdate: boolean = false;
     protected onLoad(): void {
-        DataManager.Instance.stage = this.stage = this.node.getChildByName("Stage");
-        this.ui = this.node.getChildByName("UI");
-        DataManager.Instance.jm = this.ui.getComponentInChildren(JoyStickMgr);
-        this.stage.destroyAllChildren();
+
     }
 
     protected async start(): Promise<void> {
-        // await this.connectServer();
-        // NetworkMgr.Instance.sendMsg("Hello, this is Clent1");
-        // NetworkMgr.Instance.listenMsg("haha", (data) => {
-        //     console.log(`SWP log_____________ listenMsg: `, data);
-        // }, this);
-        await this.loadRes();
+        this.clearGame();
+        await Promise.all([this.connectServer(), this.loadRes]);
+        this.initGame();
+    }
+
+    private initGame() {
+        DataManager.Instance.jm = this.ui.getComponentInChildren(JoyStickMgr);
         this.initMap();
         this._useUpdate = true;
+    }
+
+    private clearGame() {
+        DataManager.Instance.stage = this.stage = this.node.getChildByName("Stage");
+        this.ui = this.node.getChildByName("UI");
+        this.stage.destroyAllChildren();
     }
 
     private async connectServer() {

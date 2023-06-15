@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-14 14:37:43
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-14 20:54:54
+ * @LastEditTime : 2023-06-15 18:12:25
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Global\NetworkMgr.ts
  * @Description  : 
  */
@@ -51,8 +51,9 @@ export class NetworkMgr {
         });
     }
 
-    public sendMsg(data) {
-        this.ws.send(data);
+    public sendMsg(name: string, data) {
+        let msg = { name, data };
+        this.ws.send(JSON.stringify(msg));
     }
 
     public listenMsg(name: string, cb: Function, ctx: unknown) {
