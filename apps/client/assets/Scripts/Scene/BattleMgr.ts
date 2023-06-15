@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 22:02:37
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-15 17:50:59
+ * @LastEditTime : 2023-06-15 18:34:33
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Scene\BattleMgr.ts
  * @Description  : 
  */
@@ -49,17 +49,14 @@ export class BattleMgr extends Component {
     }
 
     private handlerServerSync({ inputs }: any) {
-        console.log(`SWP log_____________ cccc`);
         for (let input of inputs) {
-            let { type }: IClientInput = input;
-            console.log(`SWP log__________handlerServerSync___ 类型 ${type}`);
             DataManager.Instance.apllyInput(input);
         }
     }
 
-    private handleClientSync(data: IClientInput) {
+    private handleClientSync(input: IClientInput) {
         let msg = {
-            data,
+            input,
             frameID: DataManager.Instance.frameID++,
         };
         NetworkMgr.Instance.sendMsg(ApiMsgEnum.MsgClientSync, msg);

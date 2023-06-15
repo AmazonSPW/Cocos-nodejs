@@ -2,15 +2,16 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 22:04:16
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-14 12:34:58
- * @FilePath     : \client\assets\Scripts\Entity\Actor\ActorMgr.ts
+ * @LastEditTime : 2023-06-15 18:20:20
+ * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Entity\Actor\ActorMgr.ts
  * @Description  : 
  */
 import { ProgressBar, _decorator, instantiate } from 'cc';
 import { EntityManager } from '../../Base/EntityManager';
 import { EntityTypeEnum, IActor, InputTypeEnum } from '../../Common';
-import { EntityStateEnum } from '../../Enum';
+import { EntityStateEnum, EventEnum } from '../../Enum';
 import DataManager from '../../Global/DataManager';
+import EventManager from '../../Global/EventManager';
 import { WeaponMgr } from '../Weapon/WeaponMgr';
 import { ActorStateMachine } from './ActorStateMachine';
 const { ccclass, property } = _decorator;
@@ -45,7 +46,7 @@ export class ActorMgr extends EntityManager {
         if (this.id != DataManager.Instance.curPlayerID) return;
         if (DataManager.Instance.jm.joyStickDir.lengthSqr() > 0) {
             const { x, y } = DataManager.Instance.jm.joyStickDir;
-            DataManager.Instance.apllyInput({
+            EventManager.Instance.emit(EventEnum.ClientSync, {
                 id: 1,
                 type: InputTypeEnum.ActorMove,
                 direction: {
@@ -53,6 +54,14 @@ export class ActorMgr extends EntityManager {
                 },
                 dt,
             });
+            // DataManager.Instance.apllyInput({
+            //     id: 1,
+            //     type: InputTypeEnum.ActorMove,
+            //     direction: {
+            //         x, y,
+            //     },
+            //     dt,
+            // });
 
             this.state = EntityStateEnum.Run;
         }

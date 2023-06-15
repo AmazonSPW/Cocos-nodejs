@@ -13,12 +13,12 @@ let inputs = [];
 
 wss.on("connection", (socket) => {
     socket.on("message", (buffer) => {
-        let str = buffer.toString();
-        console.log(`SWP log_____________ 服务端接收到的信息  `);
+        const str = buffer.toString();
+        console.log(`SWP log_____________ 服务端接收到的信息  `, str);
         try {
-            let msg = JSON.parse(str);
-            let { name, data } = msg;
-            let { frameID, input } = data;
+            const msg = JSON.parse(str);
+            const { name, data } = msg;
+            const { frameID, input } = data;
             inputs.push(input);
         } catch (error) {
             console.log(error);
@@ -35,6 +35,8 @@ wss.on("connection", (socket) => {
                 inputs: temp,
             }
         }
+        if (msg.data.inputs.length > 0)
+            console.log(`on Server message `, temp);
         socket.send(JSON.stringify(msg));
     }, 100);
 });
