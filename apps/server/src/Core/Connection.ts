@@ -6,7 +6,7 @@ import { MyServer } from "./MyServer";
  * @Author       : pengwei.shi
  * @Date         : 2023-06-15 19:11:59
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-15 19:41:01
+ * @LastEditTime : 2023-06-15 20:26:56
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\Core\Connection.ts
  * @Description  : 
  */
@@ -23,7 +23,35 @@ export class Connection extends EventEmitter {
             try {
                 const msg = JSON.parse(str);
                 const { name, data } = msg;
-                const { frameID, input } = data;
+                if (server.apiMap.has(name)) {
+                    try {
+
+                        const cb = server.apiMap.get(name);
+                        const res = cb.call(null, this, data);
+                        this.sendMsg(name, {
+                            success: true,
+                            res,
+                        });
+
+                    } catch (e) {
+                        this.sendMsg(name, {
+                            success: false,
+                            error: e.message,
+                        });
+                    }
+                }
+                else if (this.mgsMap.has(name)) {
+
+                    try {
+                        this.mgsMap.get(name).forEach(({ cb, ctx }) => {
+                            cb.call(ctx, data);
+                        });
+
+                    } catch (error) {
+                        console.log(error);
+                    }
+                }
+
             } catch (error) {
                 console.log(error);
             }

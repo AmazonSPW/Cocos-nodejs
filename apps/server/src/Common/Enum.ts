@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 22:33:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-15 17:34:03
+ * @LastEditTime : 2023-06-15 20:12:43
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\Common\Enum.ts
  * @Description  : 
  */
@@ -32,5 +32,7 @@ export enum ApiMsgEnum {
     MsgClientSync = "MsgClientSync",
     /**服务端消息同步 */
     MsgServerSync = "MsgServiceSync",
+    /**玩家请求加入游戏 */
+    ApiPlayerJoin = "ApiPlayerJoin",
 
 }

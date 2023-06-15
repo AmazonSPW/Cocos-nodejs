@@ -2,18 +2,20 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-15 19:03:23
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-15 19:27:23
+ * @LastEditTime : 2023-06-15 20:16:28
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\Core\MyServer.ts
  * @Description  : 
  */
 
 import { WebSocket, WebSocketServer } from "ws";
+import { ApiMsgEnum } from "../Common";
 import { Connection } from "./Connection";
 
 export class MyServer {
     public port: number;
     public wss: WebSocketServer;
     public connectons: Set<Connection> = new Set();
+    public apiMap: Map<string, Function> = new Map();
     public constructor({ port }: { port: number }) {
         this.port = port;
     }
@@ -39,5 +41,9 @@ export class MyServer {
                 });
             });
         })
+    }
+
+    public setApi(name: ApiMsgEnum, cb: Function) {
+        this.apiMap.set(name, cb);
     }
 }

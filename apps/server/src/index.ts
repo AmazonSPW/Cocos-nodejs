@@ -1,3 +1,5 @@
+import { ApiMsgEnum } from "./Common";
+import { Connection } from "./Core";
 import { MyServer } from "./Core/MyServer";
 import { symlinkCommon } from "./Utils";
 
@@ -6,6 +8,10 @@ symlinkCommon();
 
 let server = new MyServer({
     port: 9876
+});
+
+server.setApi(ApiMsgEnum.ApiPlayerJoin, (connection: Connection, data: any) => {
+    return data + "\n server 我是服务端，我知道！";
 });
 
 server.start().then();

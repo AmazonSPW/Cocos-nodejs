@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-14 14:37:43
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-15 19:36:51
+ * @LastEditTime : 2023-06-15 20:31:57
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Global\NetworkMgr.ts
  * @Description  : 
  */
@@ -51,6 +51,26 @@ export class NetworkMgr {
         });
     }
 
+    public callApi(name: string, data): Promise<ICallApiRet> {
+        return new Promise((resolve) => {
+            try {
+                const timer = setInterval(() => {
+                    resolve({ success: false, error: new Error("Time Out!") });
+                    this.unListenMsg(name, cb, null);
+                }, 5000);
+                const cb = (res) => {
+                    resolve(res);
+                    clearInterval(timer);
+                    this.unListenMsg(name, cb, null);
+                }
+                this.listenMsg(name, cb, null);
+                this.sendMsg(name, data);
+            } catch (error) {
+                console.log(error);
+            }
+        });
+    }
+
     public sendMsg(name: string, data) {
         let msg = {
             name,
@@ -78,4 +98,11 @@ export class NetworkMgr {
 interface IItem {
     cb: Function;
     ctx: unknown;
+}
+
+
+interface ICallApiRet {
+    success: boolean,
+    res?: any,
+    error?: Error,
 }
