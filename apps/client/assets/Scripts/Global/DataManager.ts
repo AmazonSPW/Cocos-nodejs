@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 19:19:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-14 20:54:14
+ * @LastEditTime : 2023-06-15 17:26:24
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Global\DataManager.ts
  * @Description  : 
  */
@@ -19,6 +19,7 @@ import EventManager from "./EventManager";
 export default class DataManager {
   public static Instance: DataManager;
   public curPlayerID: number = 1;
+  public frameID: number = 1;
   public stage: Node;
   public jm: JoyStickMgr;
   public actorMap: Map<number, ActorMgr> = new Map();

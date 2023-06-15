@@ -2,8 +2,8 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 22:33:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-14 12:14:06
- * @FilePath     : \client\assets\Scripts\Common\Enum.ts
+ * @LastEditTime : 2023-06-15 17:34:03
+ * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\Common\Enum.ts
  * @Description  : 
  */
 
@@ -27,3 +27,10 @@ export enum EntityTypeEnum {
     Explosion = "Explosion"
 }
 
+export enum ApiMsgEnum {
+    /**客户端消息同步 */
+    MsgClientSync = "MsgClientSync",
+    /**服务端消息同步 */
+    MsgServerSync = "MsgServiceSync",
+
+}

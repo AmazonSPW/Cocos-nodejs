@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-14 14:37:43
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-14 20:54:54
+ * @LastEditTime : 2023-06-15 17:36:53
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Global\NetworkMgr.ts
  * @Description  : 
  */
@@ -51,8 +51,12 @@ export class NetworkMgr {
         });
     }
 
-    public sendMsg(data) {
-        this.ws.send(data);
+    public sendMsg(name: string, data) {
+        let msg = {
+            name,
+            data,
+        }
+        this.ws.send(JSON.stringify(msg));
     }
 
     public listenMsg(name: string, cb: Function, ctx: unknown) {
@@ -60,6 +64,12 @@ export class NetworkMgr {
             this.map.get(name).push({ cb, ctx });
         } else {
             this.map.set(name, [{ cb, ctx }]);
+        }
+    }
+    public unListenMsg(name: string, cb: Function, ctx: unknown) {
+        if (this.map.has(name)) {
+            const index = this.map.get(name).findIndex((i) => cb === i.cb && i.ctx === ctx);
+            index > -1 && this.map.get(name).splice(index, 1);
         }
     }
 }

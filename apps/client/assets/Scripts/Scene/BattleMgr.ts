@@ -2,16 +2,17 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 22:02:37
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-14 20:57:41
+ * @LastEditTime : 2023-06-15 17:50:59
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Scene\BattleMgr.ts
  * @Description  : 
  */
 import { _decorator, Component, instantiate, Node, Prefab, SpriteFrame } from 'cc';
-import { EntityTypeEnum, InputTypeEnum } from '../Common';
+import { ApiMsgEnum, EntityTypeEnum, IClientInput, InputTypeEnum } from '../Common';
 import { ActorMgr } from '../Entity/Actor/ActorMgr';
 import { BulletMgr } from '../Entity/Bullet/BulletMgr';
-import { EPrefabPath, ETexTurePath } from '../Enum';
+import { EPrefabPath, ETexTurePath, EventEnum } from '../Enum';
 import DataManager from '../Global/DataManager';
+import EventManager from '../Global/EventManager';
 import { NetworkMgr } from '../Global/NetworkMgr';
 import { ObjectPool } from '../Global/ObjectPool';
 import { ResourceManager } from '../Global/ResourceManager';
@@ -23,22 +24,45 @@ export class BattleMgr extends Component {
     public stage: Node;
     public ui: Node;
     private _useUpdate: boolean = false;
-    protected onLoad(): void {
+    protected onLoad(): void { }
+
+    protected async start(): Promise<void> {
+        this.clearGame();
+        await Promise.all([this.connectServer(), this.loadRes()]);
+        this.initGame();
+    }
+
+    private initGame() {
+        DataManager.Instance.jm = this.ui.getComponentInChildren(JoyStickMgr);
+        this.initMap();
+        this._useUpdate = true;
+        EventManager.Instance.on(EventEnum.ClientSync, this.handleClientSync, this);
+        NetworkMgr.Instance.listenMsg(ApiMsgEnum.MsgServerSync, this.handlerServerSync, this);
+    }
+
+    private clearGame() {
+        NetworkMgr.Instance.unListenMsg(ApiMsgEnum.MsgServerSync, this.handlerServerSync, this);
+        EventManager.Instance.off(EventEnum.ClientSync, this.handleClientSync, this);
         DataManager.Instance.stage = this.stage = this.node.getChildByName("Stage");
         this.ui = this.node.getChildByName("UI");
-        DataManager.Instance.jm = this.ui.getComponentInChildren(JoyStickMgr);
         this.stage.destroyAllChildren();
     }
 
-    protected async start(): Promise<void> {
-        // await this.connectServer();
-        // NetworkMgr.Instance.sendMsg("Hello, this is Clent1");
-        // NetworkMgr.Instance.listenMsg("haha", (data) => {
-        //     console.log(`SWP log_____________ listenMsg: `, data);
-        // }, this);
-        await this.loadRes();
-        this.initMap();
-        this._useUpdate = true;
+    private handlerServerSync({ inputs }: any) {
+        console.log(`SWP log_____________ cccc`);
+        for (let input of inputs) {
+            let { type }: IClientInput = input;
+            console.log(`SWP log__________handlerServerSync___ 类型 ${type}`);
+            DataManager.Instance.apllyInput(input);
+        }
+    }
+
+    private handleClientSync(data: IClientInput) {
+        let msg = {
+            data,
+            frameID: DataManager.Instance.frameID++,
+        };
+        NetworkMgr.Instance.sendMsg(ApiMsgEnum.MsgClientSync, msg);
     }
 
     private async connectServer() {
