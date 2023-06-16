@@ -1,7 +1,14 @@
+import { PlayerMgr } from "./Biz/PlayerMgr";
 import { ApiMsgEnum } from "./Common";
 import { Connection } from "./Core";
 import { MyServer } from "./Core/MyServer";
 import { symlinkCommon } from "./Utils";
+
+declare module "./Core" {
+    interface Connection {
+        playerID: number;
+    }
+}
 
 symlinkCommon();
 
@@ -10,48 +17,27 @@ let server = new MyServer({
     port: 9876
 });
 
+server.on("connection", (connction: Connection) => {
+    console.log(`SWP log_____________ 来人了 size: ${server.connectons.size}`);
+});
+
+server.on("disconnection", (connction: Connection) => {
+    console.log(`SWP log_____________ 走人了 size: ${server.connectons.size}`);
+    if (connction.playerID) {
+        PlayerMgr.Instance.removePlayer(connction.playerID);
+    }
+
+    console.log(`SWP log_____________ 玩家列表的数值 PlayerMgr.Instance.players.size: ${PlayerMgr.Instance.players.size}`);
+});
+
 server.setApi(ApiMsgEnum.ApiPlayerJoin, (connection: Connection, data: any) => {
-    return data + "\n server 我是服务端，我知道！";
+
+    const { nickname } = data;
+    const player = PlayerMgr.Instance.createPlayer({ nickname, connection });
+    connection.playerID = player.id;
+    return {
+        player: PlayerMgr.Instance.getPlayerView(player),
+    };
 });
 
 server.start().then();
-
-// const wss = new WebSocketServer({
-//     port: 9876,
-// });
-
-// let inputs = [];
-
-// wss.on("connection", (socket) => {
-//     socket.on("message", (buffer) => {
-//         const str = buffer.toString();
-//         console.log(`SWP log_____________ 服务端接收到的信息  `, str);
-//         try {
-//             const msg = JSON.parse(str);
-//             const { name, data } = msg;
-//             const { frameID, input } = data;
-//             inputs.push(input);
-//         } catch (error) {
-//             console.log(error);
-//         }
-//     });
-
-
-//     setInterval(() => {
-//         const temp = inputs;
-//         inputs = [];
-//         let msg = {
-//             name: ApiMsgEnum.MsgServerSync,
-//             data: {
-//                 inputs: temp,
-//             }
-//         }
-//         if (msg.data.inputs.length > 0)
-//             console.log(`on Server message `, temp);
-//         socket.send(JSON.stringify(msg));
-//     }, 100);
-// });
-
-// wss.on("listening", () => {
-//     console.log(`SWP log_____________ 服务器启动`);
-// });

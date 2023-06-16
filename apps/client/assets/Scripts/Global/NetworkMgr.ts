@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-14 14:37:43
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-15 20:31:57
+ * @LastEditTime : 2023-06-16 16:55:07
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Global\NetworkMgr.ts
  * @Description  : 
  */
@@ -17,18 +17,27 @@ export class NetworkMgr {
 
     private map: Map<string, Array<IItem>> = new Map();
 
+    public isConnected: boolean = false;
+
     public connect() {
         return new Promise((resolve, reject) => {
+            if (this.isConnected) {
+                resolve(true);
+                return;
+            }
             this.ws = new WebSocket(`ws://localhost:${this.port}`);
             this.ws.onopen = () => {
+                this.isConnected = true;
                 resolve(true);
             }
 
             this.ws.onclose = () => {
+                this.isConnected = false;
                 reject(false);
             }
 
             this.ws.onerror = (e) => {
+                this.isConnected = false;
                 console.log(e);
                 reject(false);
             }

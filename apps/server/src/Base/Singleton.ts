@@ -2,13 +2,13 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 19:19:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-14 21:03:12
+ * @LastEditTime : 2023-06-16 16:34:10
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\Base\Singleton.ts
  * @Description  : 
  */
 const SINGLETON_KEY = Symbol();
 export function Singleton() {
-  return function (type: { new(), instance: any }) {
+  return function (type: { new(), Instance: any }) {
     const proxyType = new Proxy(type, {
       construct(target, argArray, newTarget) {
 
@@ -23,7 +23,7 @@ export function Singleton() {
         return target[SINGLETON_KEY];
       },
     });
-    Reflect.defineProperty(proxyType, "instance", {
+    Reflect.defineProperty(proxyType, "Instance", {
       get() {
         if (!this[SINGLETON_KEY]) {
           new this();
