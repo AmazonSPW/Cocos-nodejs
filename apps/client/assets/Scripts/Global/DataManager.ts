@@ -2,13 +2,13 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 19:19:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-15 17:26:24
+ * @LastEditTime : 2023-06-17 10:57:14
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Global\DataManager.ts
  * @Description  : 
  */
 import { Node, Prefab, SpriteFrame, screen } from "cc";
 import { Singleton } from "../Base/Singleton";
-import { EntityTypeEnum, IBullet, IClientInput, IState, InputTypeEnum } from "../Common";
+import { EntityTypeEnum, IBullet, IClientInput, IRoom, IState, InputTypeEnum } from "../Common";
 import { ActorMgr } from "../Entity/Actor/ActorMgr";
 import { BulletMgr } from "../Entity/Bullet/BulletMgr";
 import { EventEnum } from "../Enum";
@@ -26,6 +26,7 @@ export default class DataManager {
   public bulletMap: Map<number, BulletMgr> = new Map();
   public prefabMap: Map<string, Prefab> = new Map();
   public textureMap: Map<string, SpriteFrame[]> = new Map();
+  public roomInfo: IRoom;
 
   state: IState = {
     actors: [

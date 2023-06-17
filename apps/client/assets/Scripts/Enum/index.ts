@@ -56,8 +56,10 @@ export enum ETexTurePath {
   ExplosionIdle = "texture/explosion",
 }
 
+
 export enum SceneEnum {
   Login = "Login",
   Hall = "Hall",
   Battle = "Battle",
+  Room = "Room"
 }

@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 22:33:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-17 10:13:13
+ * @LastEditTime : 2023-06-17 10:36:08
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\Common\Enum.ts
  * @Description  : 
  */
@@ -39,6 +39,8 @@ export enum ApiMsgEnum {
     ApiPlayerJoin = "ApiPlayerJoin",
     /**获取玩家列表 */
     ApiPlayerList = "ApiPlayerList",
+    /**创建房间 */
+    ApiRoomCreate = "ApiRoomCreate",
 
 
 }
