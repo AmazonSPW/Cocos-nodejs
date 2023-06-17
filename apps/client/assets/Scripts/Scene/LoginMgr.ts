@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-16 16:52:49
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-17 09:08:15
+ * @LastEditTime : 2023-06-17 09:52:33
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Scene\LoginMgr.ts
  * @Description  : 
  */
@@ -18,7 +18,7 @@ export class LoginMgr extends Component {
     private input: EditBox;
     protected onLoad(): void {
         this.input = this.getComponentInChildren(EditBox);
-        director.preloadScene(SceneEnum.Battle);
+        director.preloadScene(SceneEnum.Hall);
     }
 
     protected async start(): Promise<void> {
@@ -47,7 +47,7 @@ export class LoginMgr extends Component {
         }
 
         DataManager.Instance.curPlayerID = res.player.id;
-        director.loadScene(SceneEnum.Battle);
+        director.loadScene(SceneEnum.Hall);
         console.log(`SWP log_____________ 登录成功\n `, res);
     }
 

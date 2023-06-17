@@ -2,8 +2,8 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 19:19:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-13 23:12:22
- * @FilePath     : \client\assets\Scripts\Enum\index.ts
+ * @LastEditTime : 2023-06-17 09:52:05
+ * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Enum\index.ts
  * @Description  : 
  */
 export enum FsmParamTypeEnum {
@@ -58,5 +58,6 @@ export enum ETexTurePath {
 
 export enum SceneEnum {
   Login = "Login",
+  Hall = "Hall",
   Battle = "Battle",
 }

@@ -2,13 +2,13 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 19:19:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-17 08:56:49
+ * @LastEditTime : 2023-06-17 10:20:30
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\Biz\PlayerMgr.ts
  * @Description  : 
  */
 
 import { Singleton } from "../Base/Singleton";
-import { IApiPlayerJoinReq } from "../Common";
+import { ApiMsgEnum, IApiPlayerJoinReq } from "../Common";
 import { Connection } from "../Core";
 import { Player } from "./Player";
 
@@ -45,6 +45,28 @@ export class PlayerMgr {
             nickname,
             rid,
         };
+    }
+
+    /**
+     * 获取玩家列表给大厅
+     * @param players 
+     * @returns 
+     */
+    public getPlayersView(players: Set<Player> = this.players) {
+        return [...players].map((p) => this.getPlayerView(p));
+    }
+
+
+    /**
+     * 当有一个玩家登录、退出游戏时
+     * 更新所有客户端维护的玩家列表信息 
+     */
+    public syncPlayers() {
+        for (const player of this.players) {
+            player.connection.sendMsg(ApiMsgEnum.MsgPlayerList, {
+                list: this.getPlayersView(),
+            });
+        }
     }
 
 }
