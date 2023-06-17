@@ -2,12 +2,13 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 19:19:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-17 10:49:48
+ * @LastEditTime : 2023-06-17 11:56:48
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\Biz\RoomMgr.ts
  * @Description  : 
  */
 
 import { Singleton } from "../Base/Singleton";
+import { ApiMsgEnum } from "../Common";
 import { PlayerMgr } from "./PlayerMgr";
 import { Room } from "./Room";
 
@@ -63,16 +64,16 @@ export class RoomMgr {
     }
 
 
-    // /**
-    //  * 当有一个玩家登录、退出游戏时
-    //  * 更新所有客户端维护的玩家列表信息 
-    //  */
-    // public syncPlayers() {
-    //     for (const player of this.players) {
-    //         player.connection.sendMsg(ApiMsgEnum.MsgPlayerList, {
-    //             list: this.getPlayersView(),
-    //         });
-    //     }
-    // }
+    /**
+     * 当有一个玩家登录、退出游戏时
+     * 更新所有客户端维护的玩家列表信息 
+     */
+    public syncRooms() {
+        for (const player of PlayerMgr.Instance.players) {
+            player.connection.sendMsg(ApiMsgEnum.MsgRoomList, {
+                list: this.getRoomsView(),
+            });
+        }
+    }
 
 }

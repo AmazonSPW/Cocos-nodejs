@@ -2,8 +2,8 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 22:33:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-17 10:36:08
- * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\Common\Enum.ts
+ * @LastEditTime : 2023-06-17 11:08:38
+ * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Common\Enum.ts
  * @Description  : 
  */
 
@@ -34,6 +34,7 @@ export enum ApiMsgEnum {
     MsgServerSync = "MsgServiceSync",
     /**消息同步玩家列表 */
     MsgPlayerList = "MsgPlayerList",
+    MsgRoomList = "MsgRoomList",
 
     /**玩家请求加入游戏 */
     ApiPlayerJoin = "ApiPlayerJoin",
@@ -41,6 +42,8 @@ export enum ApiMsgEnum {
     ApiPlayerList = "ApiPlayerList",
     /**创建房间 */
     ApiRoomCreate = "ApiRoomCreate",
+    /**获取房间列表 */
+    ApiRoomList = "ApiRoomList"
 
 
 }

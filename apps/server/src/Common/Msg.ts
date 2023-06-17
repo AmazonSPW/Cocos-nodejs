@@ -7,7 +7,7 @@
  * @Description  : 
  */
 
-import { IPlayer } from "./Api";
+import { IPlayer, IRoom } from "./Api";
 import { IClientInput } from "./State";
 
 export interface IMsgClientSync {
@@ -22,4 +22,8 @@ export interface IMsgServerSync {
 
 export interface IMsgPlayerList {
     list: IPlayer[],
+}
+
+export interface IMsgRoomList {
+    list: IRoom[],
 }
