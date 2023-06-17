@@ -2,12 +2,14 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 19:19:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-16 16:49:44
+ * @LastEditTime : 2023-06-17 08:56:49
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\Biz\PlayerMgr.ts
  * @Description  : 
  */
 
 import { Singleton } from "../Base/Singleton";
+import { IApiPlayerJoinReq } from "../Common";
+import { Connection } from "../Core";
 import { Player } from "./Player";
 
 @Singleton()
@@ -18,8 +20,8 @@ export class PlayerMgr {
 
     public players: Set<Player> = new Set();
     public idMapPlayer: Map<number, Player> = new Map();
-    public createPlayer({ nickname, connction }: any) {
-        const player = new Player({ id: this.nextPlayerID++, nickname, connction });
+    public createPlayer({ nickname, connection }: IApiPlayerJoinReq & { connection: Connection }) {
+        const player = new Player({ id: this.nextPlayerID++, nickname, connection });
         this.players.add(player);
         this.idMapPlayer.set(player.id, player);
         return player;

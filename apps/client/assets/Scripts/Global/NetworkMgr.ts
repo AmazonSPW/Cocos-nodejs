@@ -2,11 +2,12 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-14 14:37:43
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-16 16:55:07
+ * @LastEditTime : 2023-06-17 09:07:22
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Global\NetworkMgr.ts
  * @Description  : 
  */
 import { Singleton } from "../Base/Singleton";
+import { IModule } from "../Common";
 
 @Singleton()
 export class NetworkMgr {
@@ -60,27 +61,27 @@ export class NetworkMgr {
         });
     }
 
-    public callApi(name: string, data): Promise<ICallApiRet> {
+    public callApi<T extends keyof IModule["api"]>(name: T, data: IModule["api"][T]["req"]): Promise<ICallApiRet<IModule["api"][T]["res"]>> {
         return new Promise((resolve) => {
             try {
                 const timer = setInterval(() => {
                     resolve({ success: false, error: new Error("Time Out!") });
-                    this.unListenMsg(name, cb, null);
+                    this.unListenMsg(name as any, cb, null);
                 }, 5000);
                 const cb = (res) => {
                     resolve(res);
                     clearInterval(timer);
-                    this.unListenMsg(name, cb, null);
+                    this.unListenMsg(name as any, cb, null);
                 }
-                this.listenMsg(name, cb, null);
-                this.sendMsg(name, data);
+                this.listenMsg(name as any, cb, null);
+                this.sendMsg(name as any, data);
             } catch (error) {
                 console.log(error);
             }
         });
     }
 
-    public sendMsg(name: string, data) {
+    public sendMsg<T extends keyof IModule["msg"]>(name: T, data: IModule["msg"][T]) {
         let msg = {
             name,
             data,
@@ -88,14 +89,14 @@ export class NetworkMgr {
         this.ws.send(JSON.stringify(msg));
     }
 
-    public listenMsg(name: string, cb: Function, ctx: unknown) {
+    public listenMsg<T extends keyof IModule["msg"]>(name: T, cb: (args: IModule["msg"][T]) => void, ctx: unknown) {
         if (this.map.has(name)) {
             this.map.get(name).push({ cb, ctx });
         } else {
             this.map.set(name, [{ cb, ctx }]);
         }
     }
-    public unListenMsg(name: string, cb: Function, ctx: unknown) {
+    public unListenMsg<T extends keyof IModule["msg"]>(name: T, cb: (args: IModule["msg"][T]) => void, ctx: unknown) {
         if (this.map.has(name)) {
             const index = this.map.get(name).findIndex((i) => cb === i.cb && i.ctx === ctx);
             index > -1 && this.map.get(name).splice(index, 1);
@@ -110,8 +111,8 @@ interface IItem {
 }
 
 
-interface ICallApiRet {
+interface ICallApiRet<T> {
     success: boolean,
-    res?: any,
+    res?: T,
     error?: Error,
 }

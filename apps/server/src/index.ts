@@ -1,5 +1,13 @@
+/** 
+ * @Author       : pengwei.shi
+ * @Date         : 2023-06-11 19:19:52
+ * @LastEditors  : pengwei.shi
+ * @LastEditTime : 2023-06-17 09:05:16
+ * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\index.ts
+ * @Description  : 
+ */
 import { PlayerMgr } from "./Biz/PlayerMgr";
-import { ApiMsgEnum } from "./Common";
+import { ApiMsgEnum, IApiPlayerJoinReq } from "./Common";
 import { Connection } from "./Core";
 import { MyServer } from "./Core/MyServer";
 import { symlinkCommon } from "./Utils";
@@ -30,7 +38,7 @@ server.on("disconnection", (connction: Connection) => {
     console.log(`SWP log_____________ 玩家列表的数值 PlayerMgr.Instance.players.size: ${PlayerMgr.Instance.players.size}`);
 });
 
-server.setApi(ApiMsgEnum.ApiPlayerJoin, (connection: Connection, data: any) => {
+server.setApi(ApiMsgEnum.ApiPlayerJoin, (connection: Connection, data: IApiPlayerJoinReq) => {
 
     const { nickname } = data;
     const player = PlayerMgr.Instance.createPlayer({ nickname, connection });

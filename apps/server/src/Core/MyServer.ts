@@ -2,14 +2,14 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-15 19:03:23
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-16 17:19:45
+ * @LastEditTime : 2023-06-17 09:05:54
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\Core\MyServer.ts
  * @Description  : 
  */
 
 import { EventEmitter } from "stream";
 import { WebSocket, WebSocketServer } from "ws";
-import { ApiMsgEnum } from "../Common";
+import { IModule } from "../Common";
 import { Connection } from "./Connection";
 
 export class MyServer extends EventEmitter {
@@ -43,7 +43,7 @@ export class MyServer extends EventEmitter {
         })
     }
 
-    public setApi(name: ApiMsgEnum, cb: Function) {
+    public setApi<T extends keyof IModule["api"]>(name: T, cb: (connection: Connection, args: IModule["api"][T]["req"]) => void) {
         this.apiMap.set(name, cb);
     }
 }

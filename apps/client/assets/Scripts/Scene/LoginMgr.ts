@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-16 16:52:49
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-16 17:28:35
+ * @LastEditTime : 2023-06-17 09:08:15
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Scene\LoginMgr.ts
  * @Description  : 
  */
@@ -45,10 +45,9 @@ export class LoginMgr extends Component {
             console.log(`SWP log_____________ `, error);
             return
         }
-        DataManager.Instance.curPlayerID = res.Player.id;
 
+        DataManager.Instance.curPlayerID = res.player.id;
         director.loadScene(SceneEnum.Battle);
-
         console.log(`SWP log_____________ 登录成功\n `, res);
     }
 

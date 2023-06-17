@@ -2,12 +2,12 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 22:02:37
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-15 20:39:20
+ * @LastEditTime : 2023-06-17 08:53:08
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Scene\BattleMgr.ts
  * @Description  : 
  */
 import { _decorator, Component, instantiate, Node, Prefab, SpriteFrame } from 'cc';
-import { ApiMsgEnum, EntityTypeEnum, IClientInput, InputTypeEnum } from '../Common';
+import { ApiMsgEnum, EntityTypeEnum, IClientInput, IMsgClientSync, IMsgServerSync, InputTypeEnum } from '../Common';
 import { ActorMgr } from '../Entity/Actor/ActorMgr';
 import { BulletMgr } from '../Entity/Bullet/BulletMgr';
 import { EPrefabPath, ETexTurePath, EventEnum } from '../Enum';
@@ -30,13 +30,13 @@ export class BattleMgr extends Component {
         this.clearGame();
         await Promise.all([this.connectServer(), this.loadRes()]);
 
-        const { success, error, res } = await NetworkMgr.Instance.callApi(ApiMsgEnum.ApiPlayerJoin, "client: 我是客户端cocos");
+        // const { success, error, res } = await NetworkMgr.Instance.callApi(ApiMsgEnum.ApiPlayerJoin, "client: 我是客户端cocos");
 
-        if (!success) {
-            console.log(`SWP log_____________ `, error);
-            return
-        }
-        console.log(`SWP log_____________ 登录成功\n `, res);
+        // if (!success) {
+        //     console.log(`SWP log_____________ `, error);
+        //     return
+        // }
+        // console.log(`SWP log_____________ 登录成功\n `, res);
 
         // this.initGame();
     }
@@ -57,16 +57,16 @@ export class BattleMgr extends Component {
         this.stage.destroyAllChildren();
     }
 
-    private handlerServerSync({ inputs }: any) {
+    private handlerServerSync({ inputs }: IMsgServerSync) {
         for (let input of inputs) {
             DataManager.Instance.apllyInput(input);
         }
     }
 
     private handleClientSync(input: IClientInput) {
-        let msg = {
+        let msg: IMsgClientSync = {
             input,
-            frameID: DataManager.Instance.frameID++,
+            frameId: DataManager.Instance.frameID++,
         };
         NetworkMgr.Instance.sendMsg(ApiMsgEnum.MsgClientSync, msg);
     }

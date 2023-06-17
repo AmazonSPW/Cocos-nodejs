@@ -1,5 +1,6 @@
 import { EventEmitter } from "stream";
 import { WebSocket } from "ws";
+import { IModule } from "../Common";
 import { MyServer } from "./MyServer";
 
 /** 
@@ -58,7 +59,7 @@ export class Connection extends EventEmitter {
         });
     }
 
-    public sendMsg(name: string, data) {
+    public sendMsg<T extends keyof IModule["msg"]>(name: T, data: IModule["msg"][T]) {
         let msg = {
             name,
             data,
@@ -66,14 +67,14 @@ export class Connection extends EventEmitter {
         this.ws.send(JSON.stringify(msg));
     }
 
-    public listenMsg(name: string, cb: Function, ctx: unknown) {
+    public listenMsg<T extends keyof IModule["msg"]>(name: T, cb: (args: IModule["msg"][T]) => void, ctx: unknown) {
         if (this.mgsMap.has(name)) {
             this.mgsMap.get(name).push({ cb, ctx });
         } else {
             this.mgsMap.set(name, [{ cb, ctx }]);
         }
     }
-    public unListenMsg(name: string, cb: Function, ctx: unknown) {
+    public unListenMsg<T extends keyof IModule["msg"]>(name: T, cb: (args: IModule["msg"][T]) => void, ctx: unknown) {
         if (this.mgsMap.has(name)) {
             const index = this.mgsMap.get(name).findIndex((i) => cb === i.cb && i.ctx === ctx);
             index > -1 && this.mgsMap.get(name).splice(index, 1);
