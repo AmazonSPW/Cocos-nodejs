@@ -2,8 +2,8 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-16 23:00:46
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-17 10:14:43
- * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\Common\Msg.ts
+ * @LastEditTime : 2023-06-17 21:40:00
+ * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Common\Msg.ts
  * @Description  : 
  */
 
@@ -26,4 +26,8 @@ export interface IMsgPlayerList {
 
 export interface IMsgRoomList {
     list: IRoom[],
+}
+
+export interface IMsgRoom {
+    room: IRoom,
 }

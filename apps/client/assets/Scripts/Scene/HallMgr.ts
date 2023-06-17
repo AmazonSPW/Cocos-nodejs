@@ -2,14 +2,15 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-17 09:34:44
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-17 11:56:01
+ * @LastEditTime : 2023-06-17 22:28:43
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Scene\HallMgr.ts
  * @Description  : 
  */
 import { Component, Node, Prefab, _decorator, director, instantiate } from 'cc';
 import { ApiMsgEnum, IApiPlayerListRes, IApiRoomListRes } from '../Common';
-import { SceneEnum } from '../Enum';
+import { EventEnum, SceneEnum } from '../Enum';
 import DataManager from '../Global/DataManager';
+import EventManager from '../Global/EventManager';
 import { NetworkMgr } from '../Global/NetworkMgr';
 import { PlayerMgr } from '../UI/PlayerMgr';
 import { RoomMgr } from '../UI/RoomMgr';
@@ -33,6 +34,7 @@ export class HallMgr extends Component {
     protected onLoad(): void {
         NetworkMgr.Instance.listenMsg(ApiMsgEnum.MsgPlayerList, this.renderPlayer, this);
         NetworkMgr.Instance.listenMsg(ApiMsgEnum.MsgRoomList, this.renderRoom, this);
+        EventManager.Instance.on(EventEnum.RoomJion, this.handleJoinRoom, this);
     }
 
     protected start(): void {
@@ -46,6 +48,8 @@ export class HallMgr extends Component {
     protected onDestroy(): void {
         NetworkMgr.Instance.unListenMsg(ApiMsgEnum.MsgPlayerList, this.renderPlayer, this);
         NetworkMgr.Instance.unListenMsg(ApiMsgEnum.MsgRoomList, this.renderRoom, this);
+        EventManager.Instance.off(EventEnum.RoomJion, this.handleJoinRoom, this);
+
     }
 
     public async getPlayers() {
@@ -77,18 +81,6 @@ export class HallMgr extends Component {
     }
 
 
-    public async handleCreateRoom() {
-        const { success, error, res } = await NetworkMgr.Instance.callApi(ApiMsgEnum.ApiRoomCreate, {});
-        if (!success) {
-            console.log(`SWP log_____________ handleCreateRoom `, error);
-            return
-        }
-
-        DataManager.Instance.roomInfo = res.room;
-        console.log(`SWP log_____________ DataManager.Instance.roomInfo `, DataManager.Instance.roomInfo);
-        director.loadScene(SceneEnum.Room);
-    }
-
     /**
      * 获取房间
      * @returns 
@@ -119,6 +111,30 @@ export class HallMgr extends Component {
         for (let i = 0; i < list.length; i++) {
             children[i].getComponent(RoomMgr).init(list[i]);
         }
+    }
+
+    public async handleCreateRoom() {
+        const { success, error, res } = await NetworkMgr.Instance.callApi(ApiMsgEnum.ApiRoomCreate, {});
+        if (!success) {
+            console.log(`SWP log_____________ handleCreateRoom `, error);
+            return
+        }
+
+        DataManager.Instance.roomInfo = res.room;
+        console.log(`SWP log_____________ DataManager.Instance.roomInfo `, DataManager.Instance.roomInfo);
+        director.loadScene(SceneEnum.Room);
+    }
+
+    private async handleJoinRoom(rid: number) {
+        const { success, error, res } = await NetworkMgr.Instance.callApi(ApiMsgEnum.ApiRoomJoin, { rid });
+        if (!success) {
+            console.log(`SWP log_____________ handleCreateRoom `, error);
+            return
+        }
+
+        DataManager.Instance.roomInfo = res.room;
+        console.log(`SWP log_____________ DataManager.Instance.roomInfo `, DataManager.Instance.roomInfo);
+        director.loadScene(SceneEnum.Room);
     }
 
 }

@@ -2,13 +2,13 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 19:19:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-17 11:58:06
+ * @LastEditTime : 2023-06-17 22:10:21
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\index.ts
  * @Description  : 
  */
 import { PlayerMgr } from "./Biz/PlayerMgr";
 import { RoomMgr } from "./Biz/RoomMgr";
-import { ApiMsgEnum, IApiPlayerJoinReq, IApiPlayerJoinRes, IApiPlayerListReq, IApiPlayerListRes, IApiRoomCreateReq, IApiRoomCreateRes, IApiRoomListReq, IApiRoomListRes } from "./Common";
+import { ApiMsgEnum, IApiPlayerJoinReq, IApiPlayerJoinRes, IApiPlayerListReq, IApiPlayerListRes, IApiRoomCreateReq, IApiRoomCreateRes, IApiRoomJoinReq, IApiRoomJoinRes, IApiRoomListReq, IApiRoomListRes } from "./Common";
 import { Connection } from "./Core";
 import { MyServer } from "./Core/MyServer";
 import { symlinkCommon } from "./Utils";
@@ -89,6 +89,26 @@ server.setApi(ApiMsgEnum.ApiRoomList, (connection: Connection, data: IApiRoomLis
     };
 });
 
+//创建房间
+server.setApi(ApiMsgEnum.ApiRoomJoin, (connection: Connection, { rid }: IApiRoomJoinReq): IApiRoomJoinRes => {
+
+    if (connection.playerID) {
+        const room = RoomMgr.Instance.joinRoom(rid, connection.playerID);
+        if (room) {
+            PlayerMgr.Instance.syncPlayers();
+            RoomMgr.Instance.syncRooms();
+            RoomMgr.Instance.syncRoom(room.id);
+            return {
+                room: RoomMgr.Instance.getRoomView(room)
+            }
+        } else {
+            throw new Error("房间不存在！");
+        }
+
+    } else {
+        throw new Error("未登录");
+    }
+});
 
 server
     .start()

@@ -1,6 +1,25 @@
-import { IApiPlayerJoinReq, IApiPlayerJoinRes, IApiPlayerListReq, IApiPlayerListRes, IApiRoomCreateReq, IApiRoomCreateRes, IApiRoomListReq, IApiRoomListRes } from "./Api"
+/** 
+ * @Author       : pengwei.shi
+ * @Date         : 2023-06-16 22:50:50
+ * @LastEditors  : pengwei.shi
+ * @LastEditTime : 2023-06-17 22:00:29
+ * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Common\Model.ts
+ * @Description  : 
+ */
+import {
+    IApiPlayerJoinReq,
+    IApiPlayerJoinRes,
+    IApiPlayerListReq,
+    IApiPlayerListRes,
+    IApiRoomCreateReq,
+    IApiRoomCreateRes,
+    IApiRoomJoinReq,
+    IApiRoomJoinRes,
+    IApiRoomListReq,
+    IApiRoomListRes
+} from "./Api"
 import { ApiMsgEnum } from "./Enum"
-import { IMsgClientSync, IMsgPlayerList, IMsgRoomList, IMsgServerSync } from "./Msg"
+import { IMsgClientSync, IMsgPlayerList, IMsgRoom, IMsgRoomList, IMsgServerSync } from "./Msg"
 
 /** 
  * @Author       : pengwei.shi
@@ -28,6 +47,10 @@ export class IModule {
             req: IApiRoomListReq,
             res: IApiRoomListRes,
         },
+        [ApiMsgEnum.ApiRoomJoin]: {
+            req: IApiRoomJoinReq,
+            res: IApiRoomJoinRes,
+        },
     }
 
     msg: {
@@ -35,6 +58,7 @@ export class IModule {
         [ApiMsgEnum.MsgClientSync]: IMsgClientSync,
         [ApiMsgEnum.MsgServerSync]: IMsgServerSync,
         [ApiMsgEnum.MsgRoomList]: IMsgRoomList,
+        [ApiMsgEnum.MsgRoom]: IMsgRoom,
     }
 
 }

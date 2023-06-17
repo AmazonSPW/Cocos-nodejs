@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 19:19:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-17 09:52:05
+ * @LastEditTime : 2023-06-17 21:56:11
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Enum\index.ts
  * @Description  : 
  */
@@ -24,11 +24,20 @@ export enum ParamsNameEnum {
 
 
 
+
+
+
+
+
+
+
+
 export enum EventEnum {
   WeaponShoot = "WeaponShoot",
   ExplosionBorn = "ExplosionBorn",
   BulletBorn = "BulletBorn",
-  ClientSync = "ClientSync"
+  ClientSync = "ClientSync",
+  RoomJion = "RoomJion",
 }
 
 
