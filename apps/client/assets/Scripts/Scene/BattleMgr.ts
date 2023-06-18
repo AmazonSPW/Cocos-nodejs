@@ -2,12 +2,12 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 22:02:37
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-18 14:30:44
+ * @LastEditTime : 2023-06-18 16:01:01
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Scene\BattleMgr.ts
  * @Description  : 
  */
 import { _decorator, Component, instantiate, Node, Prefab, SpriteFrame } from 'cc';
-import { ApiMsgEnum, EntityTypeEnum, IClientInput, IMsgClientSync, IMsgServerSync, InputTypeEnum } from '../Common';
+import { ApiMsgEnum, EntityTypeEnum, IClientInput, IMsgClientSync, IMsgServerSync } from '../Common';
 import { ActorMgr } from '../Entity/Actor/ActorMgr';
 import { BulletMgr } from '../Entity/Bullet/BulletMgr';
 import { EPrefabPath, ETexTurePath, EventEnum } from '../Enum';
@@ -103,10 +103,10 @@ export class BattleMgr extends Component {
     private tick(dt: number) {
         this.tickActor(dt);
 
-        DataManager.Instance.apllyInput({
-            type: InputTypeEnum.TimePast,
-            dt,
-        });
+        // DataManager.Instance.apllyInput({
+        //     type: InputTypeEnum.TimePast,
+        //     dt,
+        // });
     }
 
     private tickActor(dt: number) {

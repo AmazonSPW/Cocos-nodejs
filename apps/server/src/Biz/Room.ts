@@ -2,11 +2,11 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-17 10:25:50
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-18 14:43:21
+ * @LastEditTime : 2023-06-18 16:04:08
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\Biz\Room.ts
  * @Description  : 
  */
-import { ApiMsgEnum, EntityTypeEnum, IClientInput, IMsgClientSync, IState } from "../Common";
+import { ApiMsgEnum, EntityTypeEnum, IClientInput, IMsgClientSync, IState, InputTypeEnum } from "../Common";
 import { Connection } from "../Core";
 import { Player } from "./Player";
 import { PlayerMgr } from "./PlayerMgr";
@@ -15,6 +15,8 @@ import { RoomMgr } from "./RoomMgr";
 export class Room {
     public id: number;
     public players: Set<Player> = new Set();
+
+    private lastTime: number = undefined;
 
     /**挂起输入 */
     private pendingInput: IClientInput[] = [];
@@ -87,6 +89,10 @@ export class Room {
         const timer1 = setInterval(() => {
             this.sendServerMsg();
         }, 100);
+
+        const timer2 = setInterval(() => {
+            this.timePast();
+        }, 16);
     }
 
     private getClientSync(connection: Connection, { input, frameId }: IMsgClientSync) {
@@ -103,6 +109,16 @@ export class Room {
                 inputs,
             });
         }
+    }
+
+    private timePast() {
+        const now = process.uptime();
+        const dt = now - (this.lastTime ?? now);
+        this.pendingInput.push({
+            type: InputTypeEnum.TimePast,
+            dt,
+        });
+        this.lastTime = now;
     }
 
 }

@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 19:19:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-17 10:57:14
+ * @LastEditTime : 2023-06-18 15:58:22
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Global\DataManager.ts
  * @Description  : 
  */
@@ -103,7 +103,7 @@ export default class DataManager {
 
           for (let j = actors.length - 1; j >= 0; j--) {
             let actor = actors[j];
-            if (actor.id === this.curPlayerID) continue;
+            if (actor.id === bullet.owner) continue;
             let disSqr = (actor.position.x - bullet.position.x) ** 2 + (actor.position.y - bullet.position.y) ** 2;
             if (disSqr < (BULLET_RADIUS + ACTOR_RADIUS) ** 2) {
               EventManager.Instance.emit(EventEnum.ExplosionBorn, bullet.id, { x: bullet.position.x, y: bullet.position.y });

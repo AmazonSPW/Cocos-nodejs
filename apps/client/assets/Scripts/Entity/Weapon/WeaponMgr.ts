@@ -2,8 +2,8 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-12 20:02:15
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-14 12:07:47
- * @FilePath     : \client\assets\Scripts\Entity\Weapon\WeaponMgr.ts
+ * @LastEditTime : 2023-06-18 16:00:44
+ * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Entity\Weapon\WeaponMgr.ts
  * @Description  : 
  */
 import { _decorator, Node, UITransform, Vec2 } from 'cc';
@@ -57,7 +57,7 @@ export class WeaponMgr extends EntityManager {
         let direction = new Vec2(pointWorldPos.x - anchorWorldPos.x, pointWorldPos.y - anchorWorldPos.y).normalize();
 
 
-        DataManager.Instance.apllyInput({
+        EventManager.Instance.emit(EventEnum.ClientSync, {
             type: InputTypeEnum.WeaponShoot,
             owner: this.owner,
             direction: {
