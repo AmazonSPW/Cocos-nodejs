@@ -7,7 +7,7 @@ import { MyServer } from "./MyServer";
  * @Author       : pengwei.shi
  * @Date         : 2023-06-15 19:11:59
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-17 10:12:23
+ * @LastEditTime : 2023-06-18 14:36:21
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\Core\Connection.ts
  * @Description  : 
  */
@@ -45,7 +45,7 @@ export class Connection extends EventEmitter {
 
                     try {
                         this.mgsMap.get(name).forEach(({ cb, ctx }) => {
-                            cb.call(ctx, data);
+                            cb.call(ctx, this, data);
                         });
 
                     } catch (error) {
@@ -67,14 +67,14 @@ export class Connection extends EventEmitter {
         this.ws.send(JSON.stringify(msg));
     }
 
-    public listenMsg<T extends keyof IModule["msg"]>(name: T, cb: (args: IModule["msg"][T]) => void, ctx: unknown) {
+    public listenMsg<T extends keyof IModule["msg"]>(name: T, cb: (connection: Connection, args: IModule["msg"][T]) => void, ctx: unknown) {
         if (this.mgsMap.has(name)) {
             this.mgsMap.get(name).push({ cb, ctx });
         } else {
             this.mgsMap.set(name, [{ cb, ctx }]);
         }
     }
-    public unListenMsg<T extends keyof IModule["msg"]>(name: T, cb: (args: IModule["msg"][T]) => void, ctx: unknown) {
+    public unListenMsg<T extends keyof IModule["msg"]>(name: T, cb: (connection: Connection, args: IModule["msg"][T]) => void, ctx: unknown) {
         if (this.mgsMap.has(name)) {
             const index = this.mgsMap.get(name).findIndex((i) => cb === i.cb && i.ctx === ctx);
             index > -1 && this.mgsMap.get(name).splice(index, 1);

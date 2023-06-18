@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 22:02:37
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-17 23:11:24
+ * @LastEditTime : 2023-06-18 14:30:44
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Scene\BattleMgr.ts
  * @Description  : 
  */
@@ -30,15 +30,6 @@ export class BattleMgr extends Component {
         this.clearGame();
         await Promise.all([this.connectServer(), this.loadRes()]);
         this.initGame();
-
-        // const { success, error, res } = await NetworkMgr.Instance.callApi(ApiMsgEnum.ApiPlayerJoin, "client: 我是客户端cocos");
-
-        // if (!success) {
-        //     console.log(`SWP log_____________ `, error);
-        //     return
-        // }
-        // console.log(`SWP log_____________ 登录成功\n `, res);
-
     }
 
     private initGame() {

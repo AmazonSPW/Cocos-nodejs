@@ -2,11 +2,12 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-17 10:25:50
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-18 14:23:03
+ * @LastEditTime : 2023-06-18 14:43:21
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\Biz\Room.ts
  * @Description  : 
  */
-import { ApiMsgEnum, EntityTypeEnum, IState } from "../Common";
+import { ApiMsgEnum, EntityTypeEnum, IClientInput, IMsgClientSync, IState } from "../Common";
+import { Connection } from "../Core";
 import { Player } from "./Player";
 import { PlayerMgr } from "./PlayerMgr";
 import { RoomMgr } from "./RoomMgr";
@@ -14,6 +15,9 @@ import { RoomMgr } from "./RoomMgr";
 export class Room {
     public id: number;
     public players: Set<Player> = new Set();
+
+    /**挂起输入 */
+    private pendingInput: IClientInput[] = [];
 
     public constructor(rid: number) {
         this.id = rid;
@@ -75,6 +79,28 @@ export class Room {
         for (let player of this.players) {
             player.connection.sendMsg(ApiMsgEnum.MsgGameStart, {
                 state,
+            });
+
+            player.connection.listenMsg(ApiMsgEnum.MsgClientSync, this.getClientSync, this);
+        }
+
+        const timer1 = setInterval(() => {
+            this.sendServerMsg();
+        }, 100);
+    }
+
+    private getClientSync(connection: Connection, { input, frameId }: IMsgClientSync) {
+        this.pendingInput.push(input);
+    }
+
+    private sendServerMsg() {
+        const inputs = this.pendingInput;
+        this.pendingInput = [];
+
+        for (let player of this.players) {
+            player.connection.sendMsg(ApiMsgEnum.MsgServerSync, {
+                lastFrameId: 0,
+                inputs,
             });
         }
     }

@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 22:04:16
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-15 18:20:20
+ * @LastEditTime : 2023-06-18 14:44:57
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Entity\Actor\ActorMgr.ts
  * @Description  : 
  */
@@ -47,21 +47,13 @@ export class ActorMgr extends EntityManager {
         if (DataManager.Instance.jm.joyStickDir.lengthSqr() > 0) {
             const { x, y } = DataManager.Instance.jm.joyStickDir;
             EventManager.Instance.emit(EventEnum.ClientSync, {
-                id: 1,
+                id: DataManager.Instance.curPlayerID,
                 type: InputTypeEnum.ActorMove,
                 direction: {
                     x, y,
                 },
                 dt,
             });
-            // DataManager.Instance.apllyInput({
-            //     id: 1,
-            //     type: InputTypeEnum.ActorMove,
-            //     direction: {
-            //         x, y,
-            //     },
-            //     dt,
-            // });
 
             this.state = EntityStateEnum.Run;
         }
