@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 19:19:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-18 12:57:24
+ * @LastEditTime : 2023-06-18 13:56:44
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\Biz\RoomMgr.ts
  * @Description  : 
  */
@@ -49,6 +49,13 @@ export class RoomMgr {
             room.leave(uid);
             // this.rooms.delete(room);
             // this.idMapRoom.delete(rid);
+        }
+    }
+
+    public startRoom(rid: number) {
+        let room = this.idMapRoom.get(rid);
+        if (room) {
+            room.start();
         }
     }
 

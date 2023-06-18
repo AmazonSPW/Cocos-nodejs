@@ -29,6 +29,7 @@ export class BattleMgr extends Component {
     protected async start(): Promise<void> {
         this.clearGame();
         await Promise.all([this.connectServer(), this.loadRes()]);
+        this.initGame();
 
         // const { success, error, res } = await NetworkMgr.Instance.callApi(ApiMsgEnum.ApiPlayerJoin, "client: 我是客户端cocos");
 
@@ -38,7 +39,6 @@ export class BattleMgr extends Component {
         // }
         // console.log(`SWP log_____________ 登录成功\n `, res);
 
-        // this.initGame();
     }
 
     private initGame() {

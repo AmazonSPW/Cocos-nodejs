@@ -2,12 +2,12 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-17 09:34:44
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-18 12:31:25
+ * @LastEditTime : 2023-06-18 14:26:34
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Scene\RoomMgr.ts
  * @Description  : 
  */
 import { Component, Node, Prefab, _decorator, director, instantiate } from 'cc';
-import { ApiMsgEnum, IMsgRoom } from '../Common';
+import { ApiMsgEnum, IMsgGameStart, IMsgRoom } from '../Common';
 import { SceneEnum } from '../Enum';
 import DataManager from '../Global/DataManager';
 import { NetworkMgr } from '../Global/NetworkMgr';
@@ -25,6 +25,7 @@ export class RoomMgr extends Component {
 
     protected onLoad(): void {
         NetworkMgr.Instance.listenMsg(ApiMsgEnum.MsgRoom, this.renderPlayer, this);
+        NetworkMgr.Instance.listenMsg(ApiMsgEnum.MsgGameStart, this.handleGameStart, this);
     }
 
     protected start(): void {
@@ -34,6 +35,7 @@ export class RoomMgr extends Component {
     }
 
     protected onDestroy(): void {
+        NetworkMgr.Instance.unListenMsg(ApiMsgEnum.MsgGameStart, this.handleGameStart, this);
         NetworkMgr.Instance.unListenMsg(ApiMsgEnum.MsgRoom, this.renderPlayer, this);
     }
 
@@ -66,6 +68,19 @@ export class RoomMgr extends Component {
         DataManager.Instance.roomInfo = undefined;
         console.log(`SWP log_____________ DataManager.Instance.roomInfo `, DataManager.Instance.roomInfo);
         director.loadScene(SceneEnum.Hall);
+    }
+
+    public async handleStart() {
+        const { success, error, res } = await NetworkMgr.Instance.callApi(ApiMsgEnum.ApiGameStart, {});
+        if (!success) {
+            console.log(`SWP log_____________ handleCreateRoom `, error);
+            return
+        }
+    }
+
+    private handleGameStart({ state }: IMsgGameStart) {
+        DataManager.Instance.state = state;
+        director.loadScene(SceneEnum.Battle);
     }
 
 

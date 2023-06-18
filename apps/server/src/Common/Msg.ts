@@ -2,13 +2,13 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-16 23:00:46
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-17 21:40:00
- * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Common\Msg.ts
+ * @LastEditTime : 2023-06-18 14:17:14
+ * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\Common\Msg.ts
  * @Description  : 
  */
 
 import { IPlayer, IRoom } from "./Api";
-import { IClientInput } from "./State";
+import { IClientInput, IState } from "./State";
 
 export interface IMsgClientSync {
     input: IClientInput,
@@ -30,4 +30,8 @@ export interface IMsgRoomList {
 
 export interface IMsgRoom {
     room: IRoom,
+}
+
+export interface IMsgGameStart {
+    state: IState,
 }

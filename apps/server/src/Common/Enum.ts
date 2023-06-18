@@ -2,8 +2,8 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 22:33:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-18 12:30:07
- * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Common\Enum.ts
+ * @LastEditTime : 2023-06-18 14:16:13
+ * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\Common\Enum.ts
  * @Description  : 
  */
 
@@ -38,6 +38,8 @@ export enum ApiMsgEnum {
     MsgRoomList = "MsgRoomList",
     /**房间内消息同步 */
     MsgRoom = "MsgRoom",
+    /**开始游戏信息 */
+    MsgGameStart = "msgGameStart",
 
     /**玩家请求加入游戏 */
     ApiPlayerJoin = "ApiPlayerJoin",
@@ -51,6 +53,7 @@ export enum ApiMsgEnum {
     ApiRoomJoin = "ApiRoomJoin",
     /**离开房间 */
     ApiRoomLeave = "ApiRoomLeave",
+    ApiGameStart = "ApiGameStart",
 
 
 }

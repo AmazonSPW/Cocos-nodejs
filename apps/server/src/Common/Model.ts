@@ -2,11 +2,13 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-16 22:50:50
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-18 12:32:21
- * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Common\Model.ts
+ * @LastEditTime : 2023-06-18 14:17:36
+ * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\Common\Model.ts
  * @Description  : 
  */
 import {
+    IApiGameStartReq,
+    IApiGameStartRes,
     IApiPlayerJoinReq,
     IApiPlayerJoinRes,
     IApiPlayerListReq,
@@ -21,7 +23,7 @@ import {
     IApiRoomListRes
 } from "./Api"
 import { ApiMsgEnum } from "./Enum"
-import { IMsgClientSync, IMsgPlayerList, IMsgRoom, IMsgRoomList, IMsgServerSync } from "./Msg"
+import { IMsgClientSync, IMsgGameStart, IMsgPlayerList, IMsgRoom, IMsgRoomList, IMsgServerSync } from "./Msg"
 
 /** 
  * @Author       : pengwei.shi
@@ -57,12 +59,17 @@ export class IModule {
             req: IApiRoomLeaveReq,
             res: IApiRoomLeaveRes,
         },
+        [ApiMsgEnum.ApiGameStart]: {
+            req: IApiGameStartReq,
+            res: IApiGameStartRes,
+        },
     }
 
     msg: {
         [ApiMsgEnum.MsgPlayerList]: IMsgPlayerList,
         [ApiMsgEnum.MsgClientSync]: IMsgClientSync,
         [ApiMsgEnum.MsgServerSync]: IMsgServerSync,
+        [ApiMsgEnum.MsgGameStart]: IMsgGameStart,
         [ApiMsgEnum.MsgRoomList]: IMsgRoomList,
         [ApiMsgEnum.MsgRoom]: IMsgRoom,
     }
