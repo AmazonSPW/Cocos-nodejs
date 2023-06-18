@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 19:19:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-17 10:20:30
+ * @LastEditTime : 2023-06-18 13:46:27
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\Biz\PlayerMgr.ts
  * @Description  : 
  */
@@ -11,6 +11,7 @@ import { Singleton } from "../Base/Singleton";
 import { ApiMsgEnum, IApiPlayerJoinReq } from "../Common";
 import { Connection } from "../Core";
 import { Player } from "./Player";
+import { RoomMgr } from "./RoomMgr";
 
 @Singleton()
 export class PlayerMgr {
@@ -30,6 +31,11 @@ export class PlayerMgr {
     public removePlayer(pID: number) {
         let player = this.idMapPlayer.get(pID);
         if (player) {
+            if (player.rid) {
+                RoomMgr.Instance.leaveRoom(player.rid, pID);
+                RoomMgr.Instance.syncRooms();
+                RoomMgr.Instance.syncRoom(player.rid);
+            }
             this.players.delete(player);
             this.idMapPlayer.delete(pID);
         }

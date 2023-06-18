@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 19:19:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-18 13:09:37
+ * @LastEditTime : 2023-06-18 13:41:58
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\index.ts
  * @Description  : 
  */
@@ -36,8 +36,6 @@ server.on("disconnection", (connction: Connection) => {
         PlayerMgr.Instance.removePlayer(connction.playerID);
     }
     PlayerMgr.Instance.syncPlayers();
-
-    console.log(`SWP log_____________ 玩家列表的数值 PlayerMgr.Instance.players.size: ${PlayerMgr.Instance.players.size}`);
 });
 
 
