@@ -2,11 +2,11 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 22:04:16
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-18 14:44:57
+ * @LastEditTime : 2023-06-18 16:29:12
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Entity\Actor\ActorMgr.ts
  * @Description  : 
  */
-import { ProgressBar, _decorator, instantiate } from 'cc';
+import { ProgressBar, Tween, Vec3, _decorator, instantiate, tween } from 'cc';
 import { EntityManager } from '../../Base/EntityManager';
 import { EntityTypeEnum, IActor, InputTypeEnum } from '../../Common';
 import { EntityStateEnum, EventEnum } from '../../Enum';
@@ -23,6 +23,8 @@ export class ActorMgr extends EntityManager {
     public id: number;
 
     public hp: ProgressBar;
+    private targetPos: Vec3;
+    private tw: Tween<unknown>;
 
     public init(data: IActor) {
         this.id = data.id;
@@ -32,6 +34,9 @@ export class ActorMgr extends EntityManager {
 
         this.state = EntityStateEnum.Idle;
         this.hp = this.node.getComponentInChildren(ProgressBar);
+
+        this.node.active = false;
+        this.targetPos = undefined;
 
         //添加武器
         const prefab = DataManager.Instance.prefabMap.get(EntityTypeEnum.Weapon1);
@@ -55,7 +60,7 @@ export class ActorMgr extends EntityManager {
                 dt,
             });
 
-            this.state = EntityStateEnum.Run;
+
         }
         else {
             this.state = EntityStateEnum.Idle;
@@ -63,10 +68,36 @@ export class ActorMgr extends EntityManager {
     }
 
     public render(data: IActor) {
+        this.renderPos(data);
+        this.renderDir(data);
+        this.renderHp(data);
+    }
+
+
+    private renderPos(data: IActor) {
         let { position, direction } = data;
-        this.node.setPosition(position.x, position.y);
-
-
+        const newPos = new Vec3(position.x, position.y);
+        if (!this.targetPos) {
+            this.node.active = true;
+            this.node.setPosition(newPos);
+            this.targetPos = new Vec3(newPos);
+        } else if (!this.targetPos.equals(newPos)) {
+            this.tw?.stop();
+            this.state = EntityStateEnum.Run;
+            this.node.setPosition(this.targetPos);
+            this.targetPos.set(newPos);
+            this.tw = tween(this.node)
+                .to(0.1, {
+                    position: this.targetPos,
+                })
+                .call(() => {
+                    this.state = EntityStateEnum.Idle;
+                })
+                .start();
+        }
+    }
+    private renderDir(data: IActor) {
+        let { position, direction } = data;
         //设置面向翻转
         if (direction.x != 0) {
             this.node.setScale(direction.x > 0 ? 1 : -1, 1);
@@ -82,7 +113,8 @@ export class ActorMgr extends EntityManager {
         let rad = Math.atan2(direction.y, x);
         let angle = rad * 180 / Math.PI;
         this.wm.node.setRotationFromEuler(0, 0, angle);
-
+    }
+    private renderHp(data: IActor) {
         this.hp.progress = data.hp / this.hp.totalLength;
     }
 }

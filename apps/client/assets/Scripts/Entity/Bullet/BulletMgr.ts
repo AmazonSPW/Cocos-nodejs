@@ -2,11 +2,11 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-13 17:23:56
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-14 13:25:00
- * @FilePath     : \client\assets\Scripts\Entity\Bullet\BulletMgr.ts
+ * @LastEditTime : 2023-06-18 16:35:10
+ * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Entity\Bullet\BulletMgr.ts
  * @Description  : 
  */
-import { _decorator } from 'cc';
+import { Tween, Vec3, _decorator, tween } from 'cc';
 import { EntityManager } from '../../Base/EntityManager';
 import { EntityTypeEnum, IBullet, IVEC2 } from '../../Common';
 import { EntityStateEnum, EventEnum } from '../../Enum';
@@ -21,6 +21,8 @@ const { ccclass, property } = _decorator;
 export class BulletMgr extends EntityManager {
     public type: EntityTypeEnum;
     public id: number;
+    private targetPos: Vec3;
+    private tw: Tween<unknown>;
 
     public init(data: IBullet) {
         this.id = data.id;
@@ -29,6 +31,8 @@ export class BulletMgr extends EntityManager {
         this.fsm.init(data.type);
 
         this.state = EntityStateEnum.Idle;
+        this.node.active = false;
+        this.targetPos = undefined;
 
         EventManager.Instance.on(EventEnum.ExplosionBorn, this.handleExplosionBorn, this);
     }
@@ -46,8 +50,30 @@ export class BulletMgr extends EntityManager {
     }
 
     public render(data: IBullet) {
+        this.renderPos(data);
+        this.renderDir(data);
+    }
+
+    private renderPos(data: IBullet) {
         let { position, direction } = data;
-        this.node.setPosition(position.x, position.y);
+        const newPos = new Vec3(position.x, position.y);
+        if (!this.targetPos) {
+            this.node.active = true;
+            this.node.setPosition(newPos);
+            this.targetPos = new Vec3(newPos);
+        } else if (!this.targetPos.equals(newPos)) {
+            this.tw?.stop();
+            this.node.setPosition(this.targetPos);
+            this.targetPos.set(newPos);
+            this.tw = tween(this.node)
+                .to(0.1, {
+                    position: this.targetPos,
+                })
+                .start();
+        }
+    }
+    private renderDir(data: IBullet) {
+        let { position, direction } = data;
 
         let rad = Math.atan2(direction.y, direction.x);
         let angle = rad * 180 / Math.PI;
