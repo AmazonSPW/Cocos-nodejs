@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-17 09:34:44
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-17 22:28:43
+ * @LastEditTime : 2023-06-18 13:03:00
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Scene\HallMgr.ts
  * @Description  : 
  */
@@ -59,7 +59,7 @@ export class HallMgr extends Component {
             return
         }
 
-        console.log(`SWP log_____________ hall `, res);
+        console.log(`SWP log_____________ hall players `, res);
         this.renderPlayer(res);
     }
 
@@ -92,7 +92,7 @@ export class HallMgr extends Component {
             return
         }
 
-        console.log(`SWP log_____________ hall `, res);
+        console.log(`SWP log_____________ hall rooms `, res);
         this.renderRoom(res);
     }
 

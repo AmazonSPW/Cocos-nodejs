@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 22:33:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-17 21:58:31
+ * @LastEditTime : 2023-06-18 12:30:07
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Common\Enum.ts
  * @Description  : 
  */
@@ -48,7 +48,9 @@ export enum ApiMsgEnum {
     /**获取房间列表 */
     ApiRoomList = "ApiRoomList",
     /**加入房间 */
-    ApiRoomJoin = "ApiRoomJoin"
+    ApiRoomJoin = "ApiRoomJoin",
+    /**离开房间 */
+    ApiRoomLeave = "ApiRoomLeave",
 
 
 }

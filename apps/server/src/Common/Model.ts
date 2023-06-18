@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-16 22:50:50
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-17 22:00:29
+ * @LastEditTime : 2023-06-18 12:32:21
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Common\Model.ts
  * @Description  : 
  */
@@ -15,6 +15,8 @@ import {
     IApiRoomCreateRes,
     IApiRoomJoinReq,
     IApiRoomJoinRes,
+    IApiRoomLeaveReq,
+    IApiRoomLeaveRes,
     IApiRoomListReq,
     IApiRoomListRes
 } from "./Api"
@@ -50,6 +52,10 @@ export class IModule {
         [ApiMsgEnum.ApiRoomJoin]: {
             req: IApiRoomJoinReq,
             res: IApiRoomJoinRes,
+        },
+        [ApiMsgEnum.ApiRoomLeave]: {
+            req: IApiRoomLeaveReq,
+            res: IApiRoomLeaveRes,
         },
     }
 

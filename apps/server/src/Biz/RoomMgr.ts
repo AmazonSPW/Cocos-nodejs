@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 19:19:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-17 22:16:46
+ * @LastEditTime : 2023-06-18 12:57:24
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\Biz\RoomMgr.ts
  * @Description  : 
  */
@@ -27,6 +27,14 @@ export class RoomMgr {
         return room;
     }
 
+    public closeRoom(rid: number) {
+        let room = this.idMapRoom.get(rid);
+        if (!room) return;
+        room.close();
+        this.rooms.delete(room);
+        this.idMapRoom.delete(room.id);
+    }
+
     public joinRoom(rid: number, uid: number) {
         let room = this.idMapRoom.get(rid);
         if (room) {
@@ -35,13 +43,14 @@ export class RoomMgr {
         }
     }
 
-    // public removePlayer(pID: number) {
-    //     let player = this.idMapPlayer.get(pID);
-    //     if (player) {
-    //         this.players.delete(player);
-    //         this.idMapPlayer.delete(pID);
-    //     }
-    // }
+    public leaveRoom(rid: number, uid: number) {
+        let room = this.idMapRoom.get(rid);
+        if (room) {
+            room.leave(uid);
+            // this.rooms.delete(room);
+            // this.idMapRoom.delete(rid);
+        }
+    }
 
     /**
      * 转换前端界面所需要的信息

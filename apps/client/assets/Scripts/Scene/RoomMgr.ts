@@ -2,12 +2,13 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-17 09:34:44
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-17 22:28:01
+ * @LastEditTime : 2023-06-18 12:31:25
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Scene\RoomMgr.ts
  * @Description  : 
  */
-import { Component, Node, Prefab, _decorator, instantiate } from 'cc';
+import { Component, Node, Prefab, _decorator, director, instantiate } from 'cc';
 import { ApiMsgEnum, IMsgRoom } from '../Common';
+import { SceneEnum } from '../Enum';
 import DataManager from '../Global/DataManager';
 import { NetworkMgr } from '../Global/NetworkMgr';
 import { PlayerMgr } from '../UI/PlayerMgr';
@@ -55,17 +56,17 @@ export class RoomMgr extends Component {
     }
 
 
-    // public async handleCreateRoom() {
-    //     const { success, error, res } = await NetworkMgr.Instance.callApi(ApiMsgEnum.ApiRoomCreate, {});
-    //     if (!success) {
-    //         console.log(`SWP log_____________ handleCreateRoom `, error);
-    //         return
-    //     }
+    public async handleLeaveRoom() {
+        const { success, error, res } = await NetworkMgr.Instance.callApi(ApiMsgEnum.ApiRoomLeave, {});
+        if (!success) {
+            console.log(`SWP log_____________ handleCreateRoom `, error);
+            return
+        }
 
-    //     DataManager.Instance.roomInfo = res.room;
-    //     console.log(`SWP log_____________ DataManager.Instance.roomInfo `, DataManager.Instance.roomInfo);
-    //     director.loadScene(SceneEnum.Room);
-    // }
+        DataManager.Instance.roomInfo = undefined;
+        console.log(`SWP log_____________ DataManager.Instance.roomInfo `, DataManager.Instance.roomInfo);
+        director.loadScene(SceneEnum.Hall);
+    }
 
 
 }

@@ -2,13 +2,13 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 19:19:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-17 22:10:21
+ * @LastEditTime : 2023-06-18 13:09:37
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\index.ts
  * @Description  : 
  */
 import { PlayerMgr } from "./Biz/PlayerMgr";
 import { RoomMgr } from "./Biz/RoomMgr";
-import { ApiMsgEnum, IApiPlayerJoinReq, IApiPlayerJoinRes, IApiPlayerListReq, IApiPlayerListRes, IApiRoomCreateReq, IApiRoomCreateRes, IApiRoomJoinReq, IApiRoomJoinRes, IApiRoomListReq, IApiRoomListRes } from "./Common";
+import { ApiMsgEnum, IApiPlayerJoinReq, IApiPlayerJoinRes, IApiPlayerListReq, IApiPlayerListRes, IApiRoomCreateReq, IApiRoomCreateRes, IApiRoomJoinReq, IApiRoomJoinRes, IApiRoomLeaveReq, IApiRoomLeaveRes, IApiRoomListReq, IApiRoomListRes } from "./Common";
 import { Connection } from "./Core";
 import { MyServer } from "./Core/MyServer";
 import { symlinkCommon } from "./Utils";
@@ -108,6 +108,22 @@ server.setApi(ApiMsgEnum.ApiRoomJoin, (connection: Connection, { rid }: IApiRoom
     } else {
         throw new Error("未登录");
     }
+});
+
+//退出房间
+server.setApi(ApiMsgEnum.ApiRoomLeave, (connection: Connection, { }: IApiRoomLeaveReq): IApiRoomLeaveRes => {
+
+    if (!connection.playerID) throw new Error("未登录");
+    let player = PlayerMgr.Instance.idMapPlayer.get(connection.playerID);
+    if (!player) throw new Error("玩家不存在!");
+    let { rid, id } = player;
+    if (!rid) throw new Error("玩家不在房间里！");
+    RoomMgr.Instance.leaveRoom(rid, id);
+    PlayerMgr.Instance.syncPlayers();
+    RoomMgr.Instance.syncRooms();
+    RoomMgr.Instance.syncRoom(rid);
+    console.log(`SWP log_____________ ApiRoomLeave 房间数量 `, RoomMgr.Instance.idMapRoom.size);
+    return {};
 });
 
 server

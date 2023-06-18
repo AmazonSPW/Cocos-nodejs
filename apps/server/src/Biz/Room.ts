@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-17 10:25:50
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-17 22:13:12
+ * @LastEditTime : 2023-06-18 13:11:49
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\Biz\Room.ts
  * @Description  : 
  */
@@ -27,6 +27,15 @@ export class Room {
         }
     }
 
+    public leave(uid: number) {
+        let player = PlayerMgr.Instance.idMapPlayer.get(uid);
+        if (!player) return;
+        player.rid = undefined;
+        this.players.delete(player);
+        if (this.players.size === 0) {
+            RoomMgr.Instance.closeRoom(this.id);
+        }
+    }
 
     public sync() {
         for (let player of this.players) {
@@ -34,6 +43,10 @@ export class Room {
                 room: RoomMgr.Instance.getRoomView(this),
             });
         }
+    }
+
+    public close() {
+        this.players.clear();
     }
 
 }
