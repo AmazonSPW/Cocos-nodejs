@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-15 19:03:23
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-17 09:05:54
+ * @LastEditTime : 2023-06-19 12:36:17
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\Core\MyServer.ts
  * @Description  : 
  */
@@ -16,7 +16,7 @@ export class MyServer extends EventEmitter {
     public port: number;
     public wss: WebSocketServer;
     public connectons: Set<Connection> = new Set();
-    public apiMap: Map<string, Function> = new Map();
+    public apiMap: Map<number, Function> = new Map();
     public constructor({ port }: { port: number }) {
         super();
         this.port = port;

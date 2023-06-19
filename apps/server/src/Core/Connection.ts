@@ -1,29 +1,28 @@
 import { EventEmitter } from "stream";
 import { WebSocket } from "ws";
-import { IModule, strdecode, strencode } from "../Common";
+import { IModule, binaryDecode, binaryEncode } from "../Common";
+import { buffer2ArrayBuffer } from "../Utils";
 import { MyServer } from "./MyServer";
 
 /** 
  * @Author       : pengwei.shi
  * @Date         : 2023-06-15 19:11:59
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-19 11:44:57
+ * @LastEditTime : 2023-06-19 12:56:17
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\Core\Connection.ts
  * @Description  : 
  */
 export class Connection extends EventEmitter {
 
-    private mgsMap: Map<string, Array<IItem>> = new Map();
+    private mgsMap: Map<number, Array<IItem>> = new Map();
     constructor(public server: MyServer, public ws: WebSocket) {
         super();
         this.ws.on("close", () => {
             this.emit("close");
         });
         this.ws.on("message", (buffer: Buffer) => {
-            const ta = new Uint8Array(buffer);
-            const str = strdecode(ta);
             try {
-                const msg = JSON.parse(str);
+                const msg = binaryDecode(buffer2ArrayBuffer(buffer));;
                 const { name, data } = msg;
                 if (server.apiMap.has(name)) {
                     try {
@@ -65,9 +64,8 @@ export class Connection extends EventEmitter {
             name,
             data,
         }
-        const str = JSON.stringify(msg);
-        const ta = strencode(str);
-        const buffer = Buffer.from(ta);
+        const da = binaryEncode(name, data);
+        const buffer = Buffer.from(da.buffer);
         this.ws.send(buffer);
     }
 

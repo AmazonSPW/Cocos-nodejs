@@ -2,12 +2,12 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-14 14:37:43
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-19 11:49:06
+ * @LastEditTime : 2023-06-19 12:49:15
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Global\NetworkMgr.ts
  * @Description  : 
  */
 import { Singleton } from "../Base/Singleton";
-import { IModule, strdecode, strencode } from "../Common";
+import { IModule, binaryDecode, binaryEncode } from "../Common";
 
 @Singleton()
 export class NetworkMgr {
@@ -16,7 +16,7 @@ export class NetworkMgr {
     private port = 9876;
     private ws: WebSocket;
 
-    private map: Map<string, Array<IItem>> = new Map();
+    private map: Map<number, Array<IItem>> = new Map();
 
     public isConnected: boolean = false;
 
@@ -46,9 +46,7 @@ export class NetworkMgr {
 
             this.ws.onmessage = (e) => {
                 try {
-                    const ta = new Uint8Array(e.data);
-                    const str = strdecode(ta);
-                    const json = JSON.parse(str);
+                    const json = binaryDecode(e.data);
                     const { name, data } = json;
 
                     if (this.map.has(name)) {
@@ -88,15 +86,7 @@ export class NetworkMgr {
             name,
             data,
         }
-        // await new Promise((rs) => setTimeout(rs, 2000));
-
-        const str = JSON.stringify(msg);
-        const ta = strencode(str);
-        const ab = new ArrayBuffer(ta.length);
-        const da = new DataView(ab);
-        for (let i = 0; i < ta.length; i++) {
-            da.setUint8(i, ta[i]);
-        }
+        const da = binaryEncode(name, data);
         this.ws.send(da.buffer);
     }
 

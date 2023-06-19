@@ -1,3 +1,11 @@
+/** 
+ * @Author       : pengwei.shi
+ * @Date         : 2023-06-11 19:19:52
+ * @LastEditors  : pengwei.shi
+ * @LastEditTime : 2023-06-19 12:54:10
+ * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\Utils\index.ts
+ * @Description  : 
+ */
 import fs from "fs-extra";
 import path from "path";
 
@@ -24,3 +32,12 @@ export const symlinkCommon = async () => {
       });
   }
 };
+
+export const buffer2ArrayBuffer = (buffer: Buffer) => {
+  const ab = new ArrayBuffer(buffer.length);
+  const da = new DataView(ab);
+  for (let i = 0; i < buffer.length; i++) {
+    da.setUint8(i, buffer[i]);
+  }
+  return da.buffer;
+}
