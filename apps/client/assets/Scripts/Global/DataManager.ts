@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 19:19:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-18 15:58:22
+ * @LastEditTime : 2023-06-19 10:09:41
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Global\DataManager.ts
  * @Description  : 
  */
@@ -27,6 +27,7 @@ export default class DataManager {
   public prefabMap: Map<string, Prefab> = new Map();
   public textureMap: Map<string, SpriteFrame[]> = new Map();
   public roomInfo: IRoom;
+  public lastState: IState;
 
   state: IState = {
     actors: [

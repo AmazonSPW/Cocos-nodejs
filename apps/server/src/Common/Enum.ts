@@ -2,8 +2,8 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 22:33:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-18 14:16:13
- * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\Common\Enum.ts
+ * @LastEditTime : 2023-06-18 21:23:20
+ * @FilePath     : \client\assets\Scripts\Common\Enum.ts
  * @Description  : 
  */
 
@@ -19,6 +19,7 @@ export enum InputTypeEnum {
  */
 
 export enum EntityTypeEnum {
+
     Actor1 = "Actor1",
     Map = "Map",
     Weapon1 = "Weapon1",

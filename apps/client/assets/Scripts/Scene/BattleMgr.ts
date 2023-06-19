@@ -2,12 +2,12 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 22:02:37
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-18 16:01:01
+ * @LastEditTime : 2023-06-19 10:16:39
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Scene\BattleMgr.ts
  * @Description  : 
  */
 import { _decorator, Component, instantiate, Node, Prefab, SpriteFrame } from 'cc';
-import { ApiMsgEnum, EntityTypeEnum, IClientInput, IMsgClientSync, IMsgServerSync } from '../Common';
+import { ApiMsgEnum, EntityTypeEnum, IClientInput, IMsgClientSync, IMsgServerSync, InputTypeEnum } from '../Common';
 import { ActorMgr } from '../Entity/Actor/ActorMgr';
 import { BulletMgr } from '../Entity/Bullet/BulletMgr';
 import { EPrefabPath, ETexTurePath, EventEnum } from '../Enum';
@@ -17,6 +17,7 @@ import { NetworkMgr } from '../Global/NetworkMgr';
 import { ObjectPool } from '../Global/ObjectPool';
 import { ResourceManager } from '../Global/ResourceManager';
 import { JoyStickMgr } from '../UI/JoyStickMgr';
+import { deepClone } from '../Utils';
 const { ccclass, property } = _decorator;
 
 @ccclass('BattleMgr')
@@ -24,6 +25,7 @@ export class BattleMgr extends Component {
     public stage: Node;
     public ui: Node;
     private _useUpdate: boolean = false;
+    private _pendingMsg: IMsgClientSync[] = [];
     protected onLoad(): void { }
 
     protected async start(): Promise<void> {
@@ -48,9 +50,16 @@ export class BattleMgr extends Component {
         this.stage.destroyAllChildren();
     }
 
-    private handlerServerSync({ inputs }: IMsgServerSync) {
+    private handlerServerSync({ inputs, lastFrameId }: IMsgServerSync) {
+        DataManager.Instance.state = DataManager.Instance.lastState;
         for (let input of inputs) {
             DataManager.Instance.apllyInput(input);
+        }
+        DataManager.Instance.lastState = deepClone(DataManager.Instance.state);
+
+        this._pendingMsg = this._pendingMsg.filter(i => i.frameId > lastFrameId);
+        for (const msg of this._pendingMsg) {
+            DataManager.Instance.apllyInput(msg.input);
         }
     }
 
@@ -60,6 +69,11 @@ export class BattleMgr extends Component {
             frameId: DataManager.Instance.frameID++,
         };
         NetworkMgr.Instance.sendMsg(ApiMsgEnum.MsgClientSync, msg);
+
+        if (input.type === InputTypeEnum.ActorMove) {
+            DataManager.Instance.apllyInput(input);
+            this._pendingMsg.push(msg);
+        }
     }
 
     private async connectServer() {
@@ -102,11 +116,6 @@ export class BattleMgr extends Component {
 
     private tick(dt: number) {
         this.tickActor(dt);
-
-        // DataManager.Instance.apllyInput({
-        //     type: InputTypeEnum.TimePast,
-        //     dt,
-        // });
     }
 
     private tickActor(dt: number) {

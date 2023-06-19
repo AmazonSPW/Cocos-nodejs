@@ -2,11 +2,18 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-17 10:25:50
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-18 16:04:08
+ * @LastEditTime : 2023-06-19 10:25:40
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\Biz\Room.ts
  * @Description  : 
  */
-import { ApiMsgEnum, EntityTypeEnum, IClientInput, IMsgClientSync, IState, InputTypeEnum } from "../Common";
+import {
+    ApiMsgEnum,
+    EntityTypeEnum,
+    IClientInput,
+    IMsgClientSync,
+    IState,
+    InputTypeEnum
+} from "../Common";
 import { Connection } from "../Core";
 import { Player } from "./Player";
 import { PlayerMgr } from "./PlayerMgr";
@@ -20,6 +27,7 @@ export class Room {
 
     /**挂起输入 */
     private pendingInput: IClientInput[] = [];
+    private lastPlayerFrameIDMap: Map<number, number> = new Map();
 
     public constructor(rid: number) {
         this.id = rid;
@@ -97,6 +105,7 @@ export class Room {
 
     private getClientSync(connection: Connection, { input, frameId }: IMsgClientSync) {
         this.pendingInput.push(input);
+        this.lastPlayerFrameIDMap.set(connection.playerID, frameId);
     }
 
     private sendServerMsg() {
@@ -105,7 +114,7 @@ export class Room {
 
         for (let player of this.players) {
             player.connection.sendMsg(ApiMsgEnum.MsgServerSync, {
-                lastFrameId: 0,
+                lastFrameId: this.lastPlayerFrameIDMap.get(player.id) ?? 0,
                 inputs,
             });
         }

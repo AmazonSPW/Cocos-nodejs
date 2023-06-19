@@ -2,8 +2,8 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-17 09:34:44
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-18 13:03:00
- * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Scene\HallMgr.ts
+ * @LastEditTime : 2023-06-18 21:21:44
+ * @FilePath     : \client\assets\Scripts\Scene\HallMgr.ts
  * @Description  : 
  */
 import { Component, Node, Prefab, _decorator, director, instantiate } from 'cc';

@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-14 14:37:43
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-18 15:58:51
+ * @LastEditTime : 2023-06-19 10:05:08
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Global\NetworkMgr.ts
  * @Description  : 
  */
@@ -81,11 +81,12 @@ export class NetworkMgr {
         });
     }
 
-    public sendMsg<T extends keyof IModule["msg"]>(name: T, data: IModule["msg"][T]) {
+    public async sendMsg<T extends keyof IModule["msg"]>(name: T, data: IModule["msg"][T]) {
         let msg = {
             name,
             data,
         }
+        await new Promise((rs) => setTimeout(rs, 2000));
         this.ws.send(JSON.stringify(msg));
     }
 

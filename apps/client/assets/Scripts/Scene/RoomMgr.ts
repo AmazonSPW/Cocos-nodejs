@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-17 09:34:44
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-18 14:26:34
+ * @LastEditTime : 2023-06-19 10:15:50
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Scene\RoomMgr.ts
  * @Description  : 
  */
@@ -12,6 +12,7 @@ import { SceneEnum } from '../Enum';
 import DataManager from '../Global/DataManager';
 import { NetworkMgr } from '../Global/NetworkMgr';
 import { PlayerMgr } from '../UI/PlayerMgr';
+import { deepClone } from '../Utils';
 const { ccclass, property } = _decorator;
 
 @ccclass('RoomMgr')
@@ -80,6 +81,7 @@ export class RoomMgr extends Component {
 
     private handleGameStart({ state }: IMsgGameStart) {
         DataManager.Instance.state = state;
+        DataManager.Instance.lastState = deepClone(state);
         director.loadScene(SceneEnum.Battle);
     }
 
