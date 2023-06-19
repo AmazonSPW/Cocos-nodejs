@@ -1,13 +1,13 @@
 import { EventEmitter } from "stream";
 import { WebSocket } from "ws";
-import { IModule } from "../Common";
+import { IModule, strdecode, strencode } from "../Common";
 import { MyServer } from "./MyServer";
 
 /** 
  * @Author       : pengwei.shi
  * @Date         : 2023-06-15 19:11:59
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-18 14:36:21
+ * @LastEditTime : 2023-06-19 11:44:57
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\Core\Connection.ts
  * @Description  : 
  */
@@ -20,7 +20,8 @@ export class Connection extends EventEmitter {
             this.emit("close");
         });
         this.ws.on("message", (buffer: Buffer) => {
-            const str = buffer.toString();
+            const ta = new Uint8Array(buffer);
+            const str = strdecode(ta);
             try {
                 const msg = JSON.parse(str);
                 const { name, data } = msg;
@@ -64,7 +65,10 @@ export class Connection extends EventEmitter {
             name,
             data,
         }
-        this.ws.send(JSON.stringify(msg));
+        const str = JSON.stringify(msg);
+        const ta = strencode(str);
+        const buffer = Buffer.from(ta);
+        this.ws.send(buffer);
     }
 
     public listenMsg<T extends keyof IModule["msg"]>(name: T, cb: (connection: Connection, args: IModule["msg"][T]) => void, ctx: unknown) {

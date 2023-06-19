@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 19:19:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-19 10:50:28
+ * @LastEditTime : 2023-06-19 11:18:21
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Global\DataManager.ts
  * @Description  : 
  */
@@ -30,38 +30,7 @@ export default class DataManager {
   public lastState: IState;
 
   state: IState = {
-    actors: [
-      // {
-      //   id: 1,
-      //   type: EntityTypeEnum.Actor1,
-      //   weaponType: EntityTypeEnum.Weapon1,
-      //   bulletType: EntityTypeEnum.Bullet2,
-      //   position: {
-      //     x: -150,
-      //     y: -150,
-      //   },
-      //   direction: {
-      //     x: 1,
-      //     y: 0,
-      //   },
-      //   hp: 50,
-      // },
-      // {
-      //   id: 2,
-      //   type: EntityTypeEnum.Actor1,
-      //   weaponType: EntityTypeEnum.Weapon1,
-      //   bulletType: EntityTypeEnum.Bullet2,
-      //   position: {
-      //     x: 150,
-      //     y: 150,
-      //   },
-      //   direction: {
-      //     x: 1,
-      //     y: 0,
-      //   },
-      //   hp: 100,
-      // }
-    ],
+    actors: [],
     bullets: [],
     nextBulletID: 0
   };

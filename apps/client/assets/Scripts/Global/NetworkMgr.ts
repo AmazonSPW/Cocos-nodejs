@@ -2,12 +2,12 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-14 14:37:43
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-19 10:52:05
+ * @LastEditTime : 2023-06-19 11:49:06
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Global\NetworkMgr.ts
  * @Description  : 
  */
 import { Singleton } from "../Base/Singleton";
-import { IModule } from "../Common";
+import { IModule, strdecode, strencode } from "../Common";
 
 @Singleton()
 export class NetworkMgr {
@@ -27,6 +27,7 @@ export class NetworkMgr {
                 return;
             }
             this.ws = new WebSocket(`ws://localhost:${this.port}`);
+            this.ws.binaryType = 'arraybuffer';
             this.ws.onopen = () => {
                 this.isConnected = true;
                 resolve(true);
@@ -45,15 +46,16 @@ export class NetworkMgr {
 
             this.ws.onmessage = (e) => {
                 try {
-                    console.log("onMessage: ", e.data);
-                    const json = JSON.parse(e.data);
+                    const ta = new Uint8Array(e.data);
+                    const str = strdecode(ta);
+                    const json = JSON.parse(str);
                     const { name, data } = json;
+
                     if (this.map.has(name)) {
                         this.map.get(name).forEach(({ cb, ctx }) => {
                             cb.call(ctx, data);
                         });
                     }
-
                 } catch (e) {
                     console.log(e);
                 }
@@ -87,7 +89,15 @@ export class NetworkMgr {
             data,
         }
         // await new Promise((rs) => setTimeout(rs, 2000));
-        this.ws.send(JSON.stringify(msg));
+
+        const str = JSON.stringify(msg);
+        const ta = strencode(str);
+        const ab = new ArrayBuffer(ta.length);
+        const da = new DataView(ab);
+        for (let i = 0; i < ta.length; i++) {
+            da.setUint8(i, ta[i]);
+        }
+        this.ws.send(da.buffer);
     }
 
     public listenMsg<T extends keyof IModule["msg"]>(name: T, cb: (args: IModule["msg"][T]) => void, ctx: unknown) {
