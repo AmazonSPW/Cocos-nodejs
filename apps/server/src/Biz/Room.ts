@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-17 10:25:50
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-19 10:25:40
+ * @LastEditTime : 2023-06-19 10:46:47
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\server\src\Biz\Room.ts
  * @Description  : 
  */
@@ -12,7 +12,8 @@ import {
     IClientInput,
     IMsgClientSync,
     IState,
-    InputTypeEnum
+    InputTypeEnum,
+    toFixed
 } from "../Common";
 import { Connection } from "../Core";
 import { Player } from "./Player";
@@ -125,7 +126,7 @@ export class Room {
         const dt = now - (this.lastTime ?? now);
         this.pendingInput.push({
             type: InputTypeEnum.TimePast,
-            dt,
+            dt: toFixed(dt),
         });
         this.lastTime = now;
     }

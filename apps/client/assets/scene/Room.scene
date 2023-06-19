@@ -148,7 +148,7 @@
     "_priority": 1073741824,
     "_fov": 45,
     "_fovAxis": 0,
-    "_orthoHeight": 409.92150706436416,
+    "_orthoHeight": 406.9073783359498,
     "_near": 0,
     "_far": 2000,
     "_color": {
@@ -811,7 +811,7 @@
     "_prefab": null,
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 430,
+      "x": 0,
       "y": -300,
       "z": 0
     },
@@ -1087,7 +1087,7 @@
     },
     "_enabled": true,
     "__prefab": null,
-    "_alignFlags": 36,
+    "_alignFlags": 20,
     "_target": null,
     "_left": 0,
     "_right": 0,
@@ -1137,7 +1137,7 @@
     "_prefab": null,
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 430,
+      "x": 0,
       "y": -250,
       "z": 0
     },
@@ -1413,7 +1413,7 @@
     },
     "_enabled": true,
     "__prefab": null,
-    "_alignFlags": 36,
+    "_alignFlags": 20,
     "_target": null,
     "_left": 0,
     "_right": 0,

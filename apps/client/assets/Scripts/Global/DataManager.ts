@@ -2,13 +2,13 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 19:19:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-19 10:09:41
+ * @LastEditTime : 2023-06-19 10:50:28
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Global\DataManager.ts
  * @Description  : 
  */
 import { Node, Prefab, SpriteFrame, screen } from "cc";
 import { Singleton } from "../Base/Singleton";
-import { IBullet, IClientInput, IRoom, IState, InputTypeEnum } from "../Common";
+import { IBullet, IClientInput, IRoom, IState, InputTypeEnum, toFixed } from "../Common";
 import { ActorMgr } from "../Entity/Actor/ActorMgr";
 import { BulletMgr } from "../Entity/Bullet/BulletMgr";
 import { EventEnum } from "../Enum";
@@ -75,8 +75,8 @@ export default class DataManager {
         if (!actor) return;
         actor.direction.x = x;
         actor.direction.y = y;
-        actor.position.x += ACTOR_SPEED * x * dt;
-        actor.position.y += ACTOR_SPEED * y * dt;
+        actor.position.x += toFixed(ACTOR_SPEED * x * dt);
+        actor.position.y += toFixed(ACTOR_SPEED * y * dt);
       }
         break;
 
@@ -102,27 +102,36 @@ export default class DataManager {
         for (let i = bullets.length - 1; i >= 0; i--) {
           let bullet = bullets[i];
 
+          //检测子弹是否击中玩家
           for (let j = actors.length - 1; j >= 0; j--) {
             let actor = actors[j];
             if (actor.id === bullet.owner) continue;
             let disSqr = (actor.position.x - bullet.position.x) ** 2 + (actor.position.y - bullet.position.y) ** 2;
             if (disSqr < (BULLET_RADIUS + ACTOR_RADIUS) ** 2) {
-              EventManager.Instance.emit(EventEnum.ExplosionBorn, bullet.id, { x: bullet.position.x, y: bullet.position.y });
+              EventManager.Instance.emit(EventEnum.ExplosionBorn, bullet.id, {
+                x: bullet.position.x,
+                y: bullet.position.y
+              });
               bullets.splice(i, 1);
               actor.hp -= BULLET_DAMAGE;
               break;
             }
           }
 
+          //检测子弹是否击中墙壁
           if (Math.abs(bullet.position.x) > screen.resolution.x / 2 || Math.abs(bullet.position.y) > screen.resolution.y / 2) {
-            EventManager.Instance.emit(EventEnum.ExplosionBorn, bullet.id, { x: bullet.position.x, y: bullet.position.y });
+            EventManager.Instance.emit(EventEnum.ExplosionBorn, bullet.id, {
+              x: bullet.position.x,
+              y: bullet.position.y
+            });
             bullets.splice(i, 1);
           }
         }
 
+        //刷新子弹的位置
         for (let bullet of bullets) {
-          bullet.position.x += bullet.direction.x * dt * BULLET_SPEED;
-          bullet.position.y += bullet.direction.y * dt * BULLET_SPEED;
+          bullet.position.x += toFixed(bullet.direction.x * dt * BULLET_SPEED);
+          bullet.position.y += toFixed(bullet.direction.y * dt * BULLET_SPEED);
         }
         break;
 

@@ -2,13 +2,13 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-12 20:02:15
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-18 16:00:44
+ * @LastEditTime : 2023-06-19 11:02:18
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Entity\Weapon\WeaponMgr.ts
  * @Description  : 
  */
 import { _decorator, Node, UITransform, Vec2 } from 'cc';
 import { EntityManager } from '../../Base/EntityManager';
-import { IActor, InputTypeEnum } from '../../Common';
+import { IActor, InputTypeEnum, toFixed } from '../../Common';
 import { EntityStateEnum, EventEnum } from '../../Enum';
 import DataManager from '../../Global/DataManager';
 import EventManager from '../../Global/EventManager';
@@ -61,12 +61,12 @@ export class WeaponMgr extends EntityManager {
             type: InputTypeEnum.WeaponShoot,
             owner: this.owner,
             direction: {
-                x: direction.x,
-                y: direction.y,
+                x: toFixed(direction.x),
+                y: toFixed(direction.y),
             },
             position: {
-                x: pointStagePos.x,
-                y: pointStagePos.y,
+                x: toFixed(pointStagePos.x),
+                y: toFixed(pointStagePos.y),
             }
         });
 

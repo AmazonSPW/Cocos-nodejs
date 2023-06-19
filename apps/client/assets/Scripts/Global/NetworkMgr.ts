@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-14 14:37:43
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-19 10:05:08
+ * @LastEditTime : 2023-06-19 10:52:05
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Global\NetworkMgr.ts
  * @Description  : 
  */
@@ -45,7 +45,7 @@ export class NetworkMgr {
 
             this.ws.onmessage = (e) => {
                 try {
-                    // console.log("onMessage: ", e.data);
+                    console.log("onMessage: ", e.data);
                     const json = JSON.parse(e.data);
                     const { name, data } = json;
                     if (this.map.has(name)) {
@@ -86,7 +86,7 @@ export class NetworkMgr {
             name,
             data,
         }
-        await new Promise((rs) => setTimeout(rs, 2000));
+        // await new Promise((rs) => setTimeout(rs, 2000));
         this.ws.send(JSON.stringify(msg));
     }
 

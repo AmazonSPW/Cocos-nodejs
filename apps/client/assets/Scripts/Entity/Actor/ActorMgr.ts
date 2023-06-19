@@ -2,13 +2,13 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 22:04:16
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-18 16:29:12
+ * @LastEditTime : 2023-06-19 11:01:45
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Entity\Actor\ActorMgr.ts
  * @Description  : 
  */
 import { ProgressBar, Tween, Vec3, _decorator, instantiate, tween } from 'cc';
 import { EntityManager } from '../../Base/EntityManager';
-import { EntityTypeEnum, IActor, InputTypeEnum } from '../../Common';
+import { EntityTypeEnum, IActor, InputTypeEnum, toFixed } from '../../Common';
 import { EntityStateEnum, EventEnum } from '../../Enum';
 import DataManager from '../../Global/DataManager';
 import EventManager from '../../Global/EventManager';
@@ -49,22 +49,18 @@ export class ActorMgr extends EntityManager {
 
     public tick(dt: number): void {
         if (this.id != DataManager.Instance.curPlayerID) return;
-        if (DataManager.Instance.jm.joyStickDir.lengthSqr() > 0) {
-            const { x, y } = DataManager.Instance.jm.joyStickDir;
-            EventManager.Instance.emit(EventEnum.ClientSync, {
-                id: DataManager.Instance.curPlayerID,
-                type: InputTypeEnum.ActorMove,
-                direction: {
-                    x, y,
-                },
-                dt,
-            });
+        if (DataManager.Instance.jm.joyStickDir.lengthSqr() == 0) return;
 
-
-        }
-        else {
-            this.state = EntityStateEnum.Idle;
-        }
+        const { x, y } = DataManager.Instance.jm.joyStickDir;
+        EventManager.Instance.emit(EventEnum.ClientSync, {
+            id: DataManager.Instance.curPlayerID,
+            type: InputTypeEnum.ActorMove,
+            direction: {
+                x: toFixed(x),
+                y: toFixed(y),
+            },
+            dt: toFixed(dt),
+        });
     }
 
     public render(data: IActor) {
