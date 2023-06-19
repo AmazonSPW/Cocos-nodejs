@@ -2,7 +2,7 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 19:19:52
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-19 11:18:21
+ * @LastEditTime : 2023-06-19 15:34:28
  * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Global\DataManager.ts
  * @Description  : 
  */
@@ -32,7 +32,8 @@ export default class DataManager {
   state: IState = {
     actors: [],
     bullets: [],
-    nextBulletID: 0
+    nextBulletID: 0,
+    seed: 1,
   };
 
   public apllyInput(input: IClientInput) {
@@ -81,6 +82,9 @@ export default class DataManager {
                 x: bullet.position.x,
                 y: bullet.position.y
               });
+              // const random = randomBySeed(this.state.seed);
+              // this.state.seed = random;
+              // const damage = random / 233280 >= 0.5 ? BULLET_DAMAGE * 2 : BULLET_DAMAGE;
               bullets.splice(i, 1);
               actor.hp -= BULLET_DAMAGE;
               break;

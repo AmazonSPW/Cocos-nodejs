@@ -2,8 +2,8 @@
  * @Author       : pengwei.shi
  * @Date         : 2023-06-11 22:07:35
  * @LastEditors  : pengwei.shi
- * @LastEditTime : 2023-06-14 12:31:06
- * @FilePath     : \client\assets\Scripts\Common\State.ts
+ * @LastEditTime : 2023-06-19 15:29:21
+ * @FilePath     : \cocos-nodejs-io-game-start-demo\apps\client\assets\Scripts\Common\State.ts
  * @Description  : 
  */
 
@@ -11,19 +11,19 @@ import { EntityTypeEnum, InputTypeEnum } from "./Enum";
 
 
 export interface IVEC2 {
-    x: number;
-    y: number;
+    x: number,
+    y: number,
 }
 
 
 export interface IActor {
-    id: number;
-    position: IVEC2;
-    direction: IVEC2;
-    type: EntityTypeEnum;
-    weaponType: EntityTypeEnum;
-    bulletType: EntityTypeEnum,
     hp: number,
+    id: number,
+    position: IVEC2,
+    direction: IVEC2,
+    type: EntityTypeEnum,
+    weaponType: EntityTypeEnum,
+    bulletType: EntityTypeEnum,
 }
 
 
@@ -36,6 +36,8 @@ export interface IBullet {
 }
 
 export interface IState {
+    /**随机种子 */
+    seed: number,
     actors: IActor[],
     bullets: IBullet[],
     nextBulletID: number,
